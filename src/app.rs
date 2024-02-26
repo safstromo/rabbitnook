@@ -16,7 +16,7 @@ pub fn App() -> impl IntoView {
         <Stylesheet id="leptos" href="/pkg/rabbitnook.css"/>
 
         // sets the document title
-        <Title text="Welcome to Leptos"/>
+        <Title text="RabbitNook"/>
 
         // content for this welcome page
         <Router fallback=|| {
@@ -40,6 +40,7 @@ pub fn App() -> impl IntoView {
 #[component]
 fn HomePage() -> impl IntoView {
     view! {
+        <h1>Welcome to RabbitNook</h1>
         <img src="/rabbitnook.jpg" alt="Rabbitnook"/>
     }
 }

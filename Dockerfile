@@ -24,7 +24,7 @@ COPY --from=builder /work/target/release/rabbitnook /app/
 COPY --from=builder /work/target/site /app/site
 COPY --from=builder /work/Cargo.toml /app/
 
-EXPOSE $PORT
+EXPOSE 3000
 ENV LEPTOS_SITE_ROOT=./site
 
 CMD ["/app/rabbitnook"]
