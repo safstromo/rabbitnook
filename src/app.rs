@@ -1,7 +1,31 @@
 use crate::error_template::{AppError, ErrorTemplate};
+use lazy_static::lazy_static;
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
+use std::sync::atomic::{AtomicU32, Ordering};
+
+// Define a struct to hold the visitor counter
+struct VisitorCounter {
+    counter: AtomicU32,
+}
+
+impl VisitorCounter {
+    fn new() -> Self {
+        Self {
+            counter: AtomicU32::new(0),
+        }
+    }
+
+    fn increment(&self) -> u32 {
+        self.counter.fetch_add(1, Ordering::Relaxed)
+    }
+}
+
+// Lazily initialize the visitor counter using lazy_static
+lazy_static! {
+    static ref VISITOR_COUNTER: VisitorCounter = VisitorCounter::new();
+}
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -39,8 +63,11 @@ pub fn App() -> impl IntoView {
 /// Renders the home page of your application.
 #[component]
 fn HomePage() -> impl IntoView {
+    // Increment the counter using the AtomicU32
+    let visitor_number = VISITOR_COUNTER.increment();
+
     view! {
-        <h1>Welcome to RabbitNook</h1>
-        <img src="/rabbitnook.jpg" alt="Rabbitnook"/>
+            <img src="/rabbitnook.jpg" alt="Rabbitnook"/>
+            <p>You are visitor number: { visitor_number }</p>
     }
 }
