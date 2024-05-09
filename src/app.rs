@@ -67,7 +67,10 @@ fn HomePage() -> impl IntoView {
     let visitor_number = VISITOR_COUNTER.increment();
 
     view! {
-            <img src="/rabbitnook.jpg" alt="Rabbitnook"/>
-            <p>You are visitor number: { visitor_number }</p>
+        <div class="flex flex-col items-center mt-50">
+
+            <img class="rounded-lg w-96" src="/rabbitnook.jpg" alt="Rabbitnook" />
+            <p class="text-4xl">You are visitor number: { visitor_number }</p>
+        </div>
     }
 }
