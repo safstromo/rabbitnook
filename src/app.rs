@@ -27,6 +27,9 @@ lazy_static! {
     static ref VISITOR_COUNTER: VisitorCounter = VisitorCounter::new();
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct Command(String);
+
 #[component]
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
@@ -64,8 +67,40 @@ pub fn App() -> impl IntoView {
 fn HomePage() -> impl IntoView {
     // Increment the counter using the AtomicU32
     let visitor_number = VISITOR_COUNTER.increment();
+    view! {
+        <div class="flex h-screen w-screen bg-base">
+            <div class="w-1/2 flex flex-col justify-center items-center">
+                <NameHeader/>
+            </div>
+            <section class="w-1/2 flex flex-col justify-center items-center">
+                <div class="flex flex-col border shadow-md border-peach bg-base rounded-md w-5/6 h-5/6">
+                    <TerminalPwd/>
+                    <TerminalInput/>
+                </div>
+                <p class="text-xl text-sky">You are visitor number: {visitor_number}</p>
+            </section>
+        </div>
+    }
+}
+
+#[component]
+fn NameHeader() -> impl IntoView {
+    view! {
+        <section class="ml-4 items-start">
+            <h1 class="text-8xl text-blue">hey there, Im</h1>
+            <h2 class="text-7xl mt-2 font-semibold text-maroon">Oliver Säfström</h2>
+            <div class="h-1 m-1 w-52 bg-sky"></div>
+            <h3 class="text-xl ml-4 text-green">fullstack developer</h3>
+        </section>
+        <img class="rounded-full w-2/3 m-7" src="/portrait.png" alt="Portrait"/>
+    }
+}
+
+#[component]
+fn TerminalInput() -> impl IntoView {
     let (input, set_input) = create_signal("".to_string());
     let input_element: NodeRef<html::Input> = create_node_ref();
+    let (command_history, set_command_history) = create_signal(vec![Command("test".to_string())]);
 
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
         // stop the page from reloading!
@@ -81,17 +116,20 @@ fn HomePage() -> impl IntoView {
             // this means we can call`HtmlInputElement::value()`
             // to get the current value of the input
             .value();
-        set_input(value);
+        set_command_history.update(|commands| commands.push(Command(value.to_string())));
+        set_input("".to_string());
     };
+
     view! {
-            <div class="flex h-screen w-screen bg-base">
-                <div class="w-1/2 flex flex-col justify-center items-center">
-                    <NameHeader/>
-                </div>
-                <section class="w-1/2 flex flex-col justify-center items-center">
-                    <div class="flex flex-col border shadow-md border-peach bg-base rounded-md w-5/6 h-5/6">
-    <Terminal_pwd/>
-                        <section class="flex flex-row">
+        <ul>
+            <For
+
+                each=command_history
+                key=|command| command.0.clone()
+                children=move |command_history| {
+                    view! {
+                        <TerminalPwd/>
+                        <div class="flex flex-row">
                             <svg
                                 class="w-6 h-6 text-green"
                                 aria-hidden="true"
@@ -109,40 +147,47 @@ fn HomePage() -> impl IntoView {
                                     d="m9 5 7 7-7 7"
                                 ></path>
                             </svg>
-                            // TODO: Fix input to grow with text
-                            <form on:submit=on_submit>
-                                <input
-                                    class="w-fit bg-base border-none text-white focus:outline-none"
-                                    type="text"
-                                    value=input
-                                    node_ref=input_element
-                                />
-                                <span class="caret"></span>
-                            </form>
-                            <p class="text-white">"Input is: " {input}</p>
-                        </section>
-                    </div>
-                    <p class="text-xl text-sky">You are visitor number: {visitor_number}</p>
-                </section>
-            </div>
-        }
-}
+                            <li class="text-white">{command_history.0}</li>
+                        </div>
+                    }
+                }
+            />
 
-#[component]
-fn NameHeader() -> impl IntoView {
-    view! {
-        <section class="ml-4 items-start">
-            <h1 class="text-8xl text-blue">hey there, Im</h1>
-            <h2 class="text-7xl mt-2 font-semibold text-maroon">Oliver Säfström</h2>
-            <div class="h-1 m-1 w-52 bg-sky"></div>
-            <h3 class="text-xl ml-4 text-green">fullstack developer</h3>
+        </ul>
+        <section class="flex flex-row">
+            <svg
+                class="w-6 h-6 text-green"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m9 5 7 7-7 7"
+                ></path>
+            </svg>
+            // TODO: Fix input
+            <form on:submit=on_submit>
+                <input
+                    class="w-fit bg-base border-none text-white focus:outline-none"
+                    type="text"
+                    value=input
+                    node_ref=input_element
+                />
+                <span class="caret"></span>
+            </form>
         </section>
-        <img class="rounded-full w-2/3 m-7" src="/portrait.png" alt="Portrait"/>
     }
 }
 
 #[component]
-fn Terminal_pwd() -> impl IntoView {
+fn TerminalPwd() -> impl IntoView {
     view! {
         <section class="flex flex-row ml-2 items-start gap-1">
             <p class="text-teal text-lg font-semibold">rabbitnook</p>
