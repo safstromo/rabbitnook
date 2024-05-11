@@ -73,13 +73,16 @@ fn HomePage() -> impl IntoView {
         <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center">
             <div class="md:w-1/2 w-5/6 flex flex-col justify-center items-center">
                 <NameHeader/>
-            <Links/>
+                <Links/>
             </div>
             <section class="md:w-1/2 w-5/6 md:h-screen flex flex-col justify-center items-center">
                 <div class="flex flex-col border shadow-md shadow-black border-peach bg-base rounded-md w-full md:w-5/6 min-h-96 h-5/6">
                     <p class="text-white m-2">"Type 'help' for available commands"</p>
                     <TerminalHistory command_history=command_history/>
-                    <TerminalInput set_command_history=set_command_history command_history=command_history/>
+                    <TerminalInput
+                        set_command_history=set_command_history
+                        command_history=command_history
+                    />
                 </div>
                 <p class="text-sky mt-4">You are visitor number: {visitor_number}</p>
             </section>
@@ -103,17 +106,16 @@ fn NameHeader() -> impl IntoView {
 fn Links() -> impl IntoView {
     view! {
         <section class="flex justify-between items-center w-40 m-4">
-        <a href="https://github.com/safstromo" target="_blank">
-        <img class="w-10" src="/github-mark-white.svg" alt="Github Link" />
-        </a>
-        <a href="https://www.linkedin.com/in/safstromo" target="_blank">
-        <img class="w-10" src="/linkedin-white.svg" alt="Linkedin Link" />
-        </a>
-        <a href="mailto: safstrom.oliver@gmail.com" target="_blank">
-        <img class="w-10" src="/gmail.svg" alt="Gmail Link" />
-        </a>
+            <a href="https://github.com/safstromo" target="_blank">
+                <img class="w-10" src="/github-mark-white.svg" alt="Github Link"/>
+            </a>
+            <a href="https://www.linkedin.com/in/safstromo" target="_blank">
+                <img class="w-10" src="/linkedin-white.svg" alt="Linkedin Link"/>
+            </a>
+            <a href="mailto: safstrom.oliver@gmail.com" target="_blank">
+                <img class="w-10" src="/gmail.svg" alt="Gmail Link"/>
+            </a>
 
         </section>
-
     }
 }

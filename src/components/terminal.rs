@@ -1,5 +1,4 @@
 use leptos::*;
-use leptos_router::*;
 
 #[derive(Debug, Clone)]
 pub struct Command {
@@ -22,7 +21,6 @@ pub fn TerminalInput(
 ) -> impl IntoView {
     let (input, _set_input) = create_signal("".to_string());
     let input_element: NodeRef<html::Input> = create_node_ref();
-    let navigate = leptos_router::use_navigate();
 
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
         // stop the page from reloading!
@@ -55,6 +53,7 @@ pub fn TerminalInput(
                 set_command_history.update(|commands| commands.push(help_command));
             }
             "sudo" => {
+                open_link("https://www.youtube.com/watch?v=dQw4w9WgXcQ".to_string());
                 let sudo_command = Command {
                     command: value.clone(),
                     component: HtmlTag::A,
@@ -64,6 +63,7 @@ pub fn TerminalInput(
                 set_command_history.update(|commands| commands.push(sudo_command));
             }
             "pwd" => {
+                open_link("https://github.com/safstromo/rabbitnook".to_string());
                 let pwd_command = Command {
                     command: value.clone(),
                     component: HtmlTag::A,
@@ -73,15 +73,7 @@ pub fn TerminalInput(
                 set_command_history.update(|commands| commands.push(pwd_command));
             }
             "git" => {
-                navigate(
-                    "https://github.com/safstromo",
-                    NavigateOptions {
-                        resolve: false,
-                        replace: true,
-                        scroll: true,
-                        state: State::default(),
-                    },
-                );
+                open_link("https://github.com/safstromo".to_string());
                 let git_command = Command {
                     command: value.clone(),
                     component: HtmlTag::A,
@@ -91,6 +83,7 @@ pub fn TerminalInput(
                 set_command_history.update(|commands| commands.push(git_command));
             }
             "email" => {
+                open_link("mailto:safstrom.oliver@gmail.com".to_string());
                 let email_command = Command {
                     command: value.clone(),
                     component: HtmlTag::A,
@@ -100,6 +93,7 @@ pub fn TerminalInput(
                 set_command_history.update(|commands| commands.push(email_command));
             }
             "linkedin" => {
+                open_link("https://www.linkedin.com/in/safstromo/".to_string());
                 let linkedin_command = Command {
                     command: value.clone(),
                     component: HtmlTag::A,
@@ -109,6 +103,10 @@ pub fn TerminalInput(
                 set_command_history.update(|commands| commands.push(linkedin_command));
             }
             "vim" => {
+                open_link(
+                    "https://github.com/safstromo/.dotfiles/tree/main/nvim/.config/nvim"
+                        .to_string(),
+                );
                 let vim_command = Command {
                     command: value.clone(),
                     component: HtmlTag::A,
@@ -158,12 +156,20 @@ pub fn TerminalInput(
                     type="text"
                     value=input
                     node_ref=input_element
+                    autoFocus
                 />
             // TODO: Add caret
             // <span class="caret"></span>
             </form>
         </section>
     }
+}
+
+fn open_link(url: String) {
+    create_effect(move |_| {
+        let window = web_sys::window().expect("window should be available");
+        window.open_with_url_and_target(&url, "_blank").unwrap();
+    });
 }
 
 #[component]
