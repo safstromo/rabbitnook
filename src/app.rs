@@ -27,8 +27,18 @@ lazy_static! {
     static ref VISITOR_COUNTER: VisitorCounter = VisitorCounter::new();
 }
 
+#[derive(Debug, Clone)]
+struct Command {
+    command: String,
+    component: HtmlTag,
+    value: String,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-struct Command(String);
+enum HtmlTag {
+    P,
+    A,
+}
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -67,6 +77,7 @@ pub fn App() -> impl IntoView {
 fn HomePage() -> impl IntoView {
     // Increment the counter using the AtomicU32
     let visitor_number = VISITOR_COUNTER.increment();
+    let (command_history, set_command_history) = create_signal(vec![]);
     view! {
         <div class="flex h-screen w-screen bg-base">
             <div class="w-1/2 flex flex-col justify-center items-center">
@@ -74,8 +85,8 @@ fn HomePage() -> impl IntoView {
             </div>
             <section class="w-1/2 flex flex-col justify-center items-center">
                 <div class="flex flex-col border shadow-md border-peach bg-base rounded-md w-5/6 h-5/6">
-                    <TerminalPwd/>
-                    <TerminalInput/>
+                    <TerminalHistory command_history=command_history/>
+                    <TerminalInput set_command_history=set_command_history/>
                 </div>
                 <p class="text-xl text-sky">You are visitor number: {visitor_number}</p>
             </section>
@@ -97,10 +108,81 @@ fn NameHeader() -> impl IntoView {
 }
 
 #[component]
-fn TerminalInput() -> impl IntoView {
-    let (input, set_input) = create_signal("".to_string());
+fn TerminalHistory(command_history: ReadSignal<Vec<Command>>) -> impl IntoView {
+    view! {
+        <ul>
+            <For each=command_history key=|command| command.command.clone() let:child>
+                <TerminalCommand command=child/>
+            </For>
+
+        </ul>
+    }
+}
+
+#[component]
+fn TerminalCommand(command: Command) -> impl IntoView {
+    if command.component == HtmlTag::A {
+        return view! {
+            <TerminalPwd/>
+            <div class="flex flex-row">
+                <svg
+                    class="w-6 h-6 text-green"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m9 5 7 7-7 7 7 7-7 7"
+                    ></path>
+                </svg>
+                <li class="text-white">
+                    <a class="text-blue" href=command.value.clone()>
+                        {command.value}
+                    </a>
+                </li>
+            </div>
+        };
+    } else {
+        return view! {
+            <TerminalPwd/>
+            <div class="flex flex-row">
+                <svg
+                    class="w-6 h-6 text-green"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m9 5 7 7-7 7 7 7-7 7"
+                    ></path>
+                </svg>
+                <li class="text-white">
+                    <p class="text-white">{command.value}</p>
+                </li>
+            </div>
+        };
+    }
+}
+
+#[component]
+fn TerminalInput(set_command_history: WriteSignal<Vec<Command>>) -> impl IntoView {
+    let (input, _set_input) = create_signal("".to_string());
     let input_element: NodeRef<html::Input> = create_node_ref();
-    let (command_history, set_command_history) = create_signal(vec![Command("test".to_string())]);
+    let navigate = leptos_router::use_navigate();
 
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
         // stop the page from reloading!
@@ -116,44 +198,91 @@ fn TerminalInput() -> impl IntoView {
             // this means we can call`HtmlInputElement::value()`
             // to get the current value of the input
             .value();
-        set_command_history.update(|commands| commands.push(Command(value.to_string())));
-        set_input("".to_string());
+        match value.as_str() {
+            "clear" => set_command_history.update(|commands| commands.clear()),
+            "help" => {
+                let help_command = Command {
+                    command: value.clone(),
+                    component: HtmlTag::P,
+                    value: "Available commands: help, pwd, git, vim, email, sudo, linkedin, clear"
+                        .to_string(),
+                };
+                set_command_history.update(|commands| commands.push(help_command));
+            }
+            "sudo" => {
+                let sudo_command = Command {
+                    command: value.clone(),
+                    component: HtmlTag::A,
+                    value: "https://www.youtube.com/watch?v=dQw4w9WgXcQ".to_string(),
+                };
+                set_command_history.update(|commands| commands.push(sudo_command));
+            }
+            "pwd" => {
+                let pwd_command = Command {
+                    command: value.clone(),
+                    component: HtmlTag::A,
+                    value: "https://github.com/safstromo/rabbitnook".to_string(),
+                };
+                set_command_history.update(|commands| commands.push(pwd_command));
+            }
+            "git" => {
+                navigate(
+                    "/git",
+                    NavigateOptions {
+                        resolve: false,
+                        replace: false,
+                        scroll: true,
+                        state: leptos_router::State::default(),
+                    },
+                );
+                let git_command = Command {
+                    command: value.clone(),
+                    component: HtmlTag::A,
+                    value: "https://github.com/safstromo".to_string(),
+                };
+                set_command_history.update(|commands| commands.push(git_command));
+            }
+            "email" => {
+                let email_command = Command {
+                    command: value.clone(),
+                    component: HtmlTag::A,
+                    value: "mailto:safstrom.oliver@gmail.com".to_string(),
+                };
+                set_command_history.update(|commands| commands.push(email_command));
+            }
+            "linkedin" => {
+                let linkedin_command = Command {
+                    command: value.clone(),
+                    component: HtmlTag::A,
+                    value: "https://www.linkedin.com/in/safstromo/".to_string(),
+                };
+                set_command_history.update(|commands| commands.push(linkedin_command));
+            }
+            "vim" => {
+                let vim_command = Command {
+                    command: value.clone(),
+                    component: HtmlTag::A,
+                    value: "https://github.com/safstromo/.dotfiles/tree/main/nvim/.config/nvim"
+                        .to_string(),
+                };
+                set_command_history.update(|commands| commands.push(vim_command));
+            }
+
+            _ => {
+                let invalid_command = Command {
+                    command: value.clone(),
+                    component: HtmlTag::P,
+                    value: value.clone() + ": command not found",
+                };
+                set_command_history.update(|commands| commands.push(invalid_command));
+            }
+        }
+
+        // set_command_history.update(|commands| commands.push(Command(value.to_string())));
+        // set_input("".to_string());
     };
 
     view! {
-        <ul>
-            <For
-
-                each=command_history
-                key=|command| command.0.clone()
-                children=move |command_history| {
-                    view! {
-                        <TerminalPwd/>
-                        <div class="flex flex-row">
-                            <svg
-                                class="w-6 h-6 text-green"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="m9 5 7 7-7 7"
-                                ></path>
-                            </svg>
-                            <li class="text-white">{command_history.0}</li>
-                        </div>
-                    }
-                }
-            />
-
-        </ul>
         <section class="flex flex-row">
             <svg
                 class="w-6 h-6 text-green"
@@ -180,7 +309,8 @@ fn TerminalInput() -> impl IntoView {
                     value=input
                     node_ref=input_element
                 />
-                <span class="caret"></span>
+            // TODO: Add caret
+            // <span class="caret"></span>
             </form>
         </section>
     }
