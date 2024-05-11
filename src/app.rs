@@ -73,6 +73,7 @@ fn HomePage() -> impl IntoView {
         <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center">
             <div class="md:w-1/2 w-5/6 flex flex-col justify-center items-center">
                 <NameHeader/>
+            <Links/>
             </div>
             <section class="md:w-1/2 w-5/6 md:h-screen flex flex-col justify-center items-center">
                 <div class="flex flex-col border shadow-md shadow-black border-peach bg-base rounded-md w-full md:w-5/6 min-h-96 h-5/6">
@@ -96,5 +97,23 @@ fn NameHeader() -> impl IntoView {
             <h3 class="md:text-xl ml-2 md:ml-4 text-green">fullstack developer</h3>
         </section>
         <img class="rounded-full w-2/3 max-w-[360px] m-7" src="/portrait.png" alt="Portrait"/>
+    }
+}
+#[component]
+fn Links() -> impl IntoView {
+    view! {
+        <section class="flex justify-between items-center w-40 m-4">
+        <a href="https://github.com/safstromo" target="_blank">
+        <img class="w-10" src="/github-mark-white.svg" alt="Github Link" />
+        </a>
+        <a href="https://www.linkedin.com/in/safstromo" target="_blank">
+        <img class="w-10" src="/linkedin-white.svg" alt="Linkedin Link" />
+        </a>
+        <a href="mailto: safstrom.oliver@gmail.com" target="_blank">
+        <img class="w-10" src="/gmail.svg" alt="Gmail Link" />
+        </a>
+
+        </section>
+
     }
 }
