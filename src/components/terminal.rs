@@ -127,11 +127,14 @@ pub fn TerminalInput(
                 set_command_history.update(|commands| commands.push(invalid_command));
             }
         }
+        let reset = input_element()
+            .expect("input element should be mounted")
+            .set_value("");
     };
 
     view! {
         <TerminalPwd/>
-        <section class="flex flex-row">
+        <section class="flex flex-row w-full">
             <svg
                 class="w-6 h-6 text-green"
                 aria-hidden="true"
@@ -150,9 +153,9 @@ pub fn TerminalInput(
                 ></path>
             </svg>
             // TODO: Fix input
-            <form on:submit=on_submit>
+            <form class="w-full" on:submit=on_submit>
                 <input
-                    class="w-fit bg-base border-none text-white focus:outline-none"
+                    class="w-5/6 mx-2 bg-base border-none text-white focus:outline-none"
                     type="text"
                     value=input
                     node_ref=input_element
