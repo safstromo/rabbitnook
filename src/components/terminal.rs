@@ -6,6 +6,7 @@ pub struct Command {
     command: String,
     component: HtmlTag,
     value: String,
+    name: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -49,6 +50,7 @@ pub fn TerminalInput(
                     component: HtmlTag::P,
                     value: "Available commands: help, pwd, git, vim, email, sudo, linkedin, clear"
                         .to_string(),
+                    name: "help".to_string(),
                 };
                 set_command_history.update(|commands| commands.push(help_command));
             }
@@ -57,6 +59,7 @@ pub fn TerminalInput(
                     command: value.clone(),
                     component: HtmlTag::A,
                     value: "https://www.youtube.com/watch?v=dQw4w9WgXcQ".to_string(),
+                    name: "sudo".to_string(),
                 };
                 set_command_history.update(|commands| commands.push(sudo_command));
             }
@@ -65,23 +68,25 @@ pub fn TerminalInput(
                     command: value.clone(),
                     component: HtmlTag::A,
                     value: "https://github.com/safstromo/rabbitnook".to_string(),
+                    name: "github.com/safstromo/rabbitnook".to_string(),
                 };
                 set_command_history.update(|commands| commands.push(pwd_command));
             }
             "git" => {
                 navigate(
-                    "/git",
+                    "https://github.com/safstromo",
                     NavigateOptions {
                         resolve: false,
-                        replace: false,
+                        replace: true,
                         scroll: true,
-                        state: leptos_router::State::default(),
+                        state: State::default(),
                     },
                 );
                 let git_command = Command {
                     command: value.clone(),
                     component: HtmlTag::A,
                     value: "https://github.com/safstromo".to_string(),
+                    name: "github.com/safstromo".to_string(),
                 };
                 set_command_history.update(|commands| commands.push(git_command));
             }
@@ -90,6 +95,7 @@ pub fn TerminalInput(
                     command: value.clone(),
                     component: HtmlTag::A,
                     value: "mailto:safstrom.oliver@gmail.com".to_string(),
+                    name: "safstrom.oliver@gmail.com".to_string(),
                 };
                 set_command_history.update(|commands| commands.push(email_command));
             }
@@ -98,6 +104,7 @@ pub fn TerminalInput(
                     command: value.clone(),
                     component: HtmlTag::A,
                     value: "https://www.linkedin.com/in/safstromo/".to_string(),
+                    name: "linkedin.com/in/safstromo".to_string(),
                 };
                 set_command_history.update(|commands| commands.push(linkedin_command));
             }
@@ -107,6 +114,7 @@ pub fn TerminalInput(
                     component: HtmlTag::A,
                     value: "https://github.com/safstromo/.dotfiles/tree/main/nvim/.config/nvim"
                         .to_string(),
+                    name: "nvim .dotfiles".to_string(),
                 };
                 set_command_history.update(|commands| commands.push(vim_command));
             }
@@ -116,6 +124,7 @@ pub fn TerminalInput(
                     command: value.clone(),
                     component: HtmlTag::P,
                     value: value.clone() + ": command not found",
+                    name: "invalid".to_string(),
                 };
                 set_command_history.update(|commands| commands.push(invalid_command));
             }
@@ -160,7 +169,7 @@ pub fn TerminalInput(
 #[component]
 pub fn TerminalHistory(command_history: ReadSignal<Vec<Command>>) -> impl IntoView {
     view! {
-        <ul>
+        <ul class="overflow-hidden">
             <For each=command_history key=|command| command.command.clone() let:child>
                 <TerminalCommand command=child/>
             </For>
@@ -193,8 +202,8 @@ fn TerminalCommand(command: Command) -> impl IntoView {
                     ></path>
                 </svg>
                 <li class="text-white">
-                    <a class="text-blue" href=command.value.clone() target="_blank">
-                        {command.value}
+                    <a class="text-blue mx-2" href=command.value.clone() target="_blank">
+                        {command.name}
                     </a>
                 </li>
             </div>
@@ -221,7 +230,7 @@ fn TerminalCommand(command: Command) -> impl IntoView {
                     ></path>
                 </svg>
                 <li class="text-white">
-                    <p class="text-white">{command.value}</p>
+                    <p class="text-white mx-2">{command.value}</p>
                 </li>
             </div>
         };
@@ -231,7 +240,7 @@ fn TerminalCommand(command: Command) -> impl IntoView {
 #[component]
 fn TerminalPwd() -> impl IntoView {
     view! {
-        <section class="flex flex-row ml-2 items-start gap-1">
+        <section class="flex flex-row mx-2 items-start gap-1">
             <p class="text-teal text-lg font-semibold">rabbitnook</p>
             <p class="text-white text-lg font-semibold">on</p>
             <svg

@@ -70,12 +70,12 @@ fn HomePage() -> impl IntoView {
     let (command_history, set_command_history) = create_signal(vec![]);
 
     view! {
-        <div class="flex h-screen w-screen bg-base">
-            <div class="w-1/2 flex flex-col justify-center items-center">
+        <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center">
+            <div class="md:w-1/2 w-5/6 flex flex-col justify-center items-center">
                 <NameHeader/>
             </div>
-            <section class="w-1/2 flex flex-col justify-center items-center">
-                <div class="flex flex-col border shadow-md shadow-black border-peach bg-base rounded-md w-5/6 h-5/6">
+            <section class="md:w-1/2 w-5/6 md:h-screen flex flex-col justify-center items-center">
+                <div class="flex flex-col border shadow-md shadow-black border-peach bg-base rounded-md w-full md:w-5/6 min-h-96 h-5/6">
                     <p class="text-white m-2">"Type 'help' for available commands"</p>
                     <TerminalHistory command_history=command_history/>
                     <TerminalInput set_command_history=set_command_history command_history=command_history/>
@@ -89,12 +89,12 @@ fn HomePage() -> impl IntoView {
 #[component]
 fn NameHeader() -> impl IntoView {
     view! {
-        <section class="ml-4 items-start">
-            <h1 class="text-8xl text-blue">hey there, Im</h1>
-            <h2 class="text-7xl mt-2 font-semibold text-maroon">Oliver Säfström</h2>
-            <div class="h-1 m-1 w-52 bg-sky"></div>
-            <h3 class="text-xl ml-4 text-green">fullstack developer</h3>
+        <section class="flex flex-col m-4 md:p-4  items-start">
+            <h1 class="text-5xl md:text-8xl text-blue">hey there, Im</h1>
+            <h2 class="text-4xl md:text-7xl mt-2 font-semibold text-maroon">Oliver Säfström</h2>
+            <div class="h-1 m-1 w-40 md:w-60 bg-sky"></div>
+            <h3 class="md:text-xl ml-2 md:ml-4 text-green">fullstack developer</h3>
         </section>
-        <img class="rounded-full w-2/3 m-7" src="/portrait.png" alt="Portrait"/>
+        <img class="rounded-full w-2/3 max-w-[360px] m-7" src="/portrait.png" alt="Portrait"/>
     }
 }
