@@ -90,9 +90,9 @@ fn HomePage() -> impl IntoView {
                         let _ = input_element.get().expect("Input shoud be there to focus").focus();
                     }
                 >
-                    <pre>
-                        <p class="text-white text-sm mx-2">{domain}</p>
-                    </pre>
+                    // <pre>
+                    //     <p class="text-white text-xs md:text-sm mx-2">{domain}</p>
+                    // </pre>
                     <p class="text-white m-2">"Type 'help' for available commands."</p>
                     <TerminalHistory command_history=command_history/>
                     <TerminalInput
