@@ -268,7 +268,7 @@ fn TerminalPwd() -> impl IntoView {
             <p class="text-pink text-lg font-semibold">main</p>
 
             <svg
-                class="w-6 h-6 text-peach ml-1"
+                class="w-6 h-6 text-peach mx-1"
                 fill="currentColor"
                 width="1200pt"
                 height="1200pt"
