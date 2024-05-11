@@ -18,9 +18,10 @@ enum HtmlTag {
 pub fn TerminalInput(
     set_command_history: WriteSignal<Vec<Command>>,
     command_history: ReadSignal<Vec<Command>>,
+    input_element: NodeRef<html::Input>,
 ) -> impl IntoView {
     let (input, _set_input) = create_signal("".to_string());
-    let input_element: NodeRef<html::Input> = create_node_ref();
+    // let input_element: NodeRef<html::Input> = create_node_ref();
 
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
         // stop the page from reloading!
@@ -127,7 +128,7 @@ pub fn TerminalInput(
                 set_command_history.update(|commands| commands.push(invalid_command));
             }
         }
-        let reset = input_element()
+        let _ = input_element()
             .expect("input element should be mounted")
             .set_value("");
     };
@@ -159,6 +160,7 @@ pub fn TerminalInput(
                     type="text"
                     value=input
                     node_ref=input_element
+                    id="terminal-input"
                     autoFocus
                 />
             // TODO: Add caret

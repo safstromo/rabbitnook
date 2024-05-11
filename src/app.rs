@@ -68,6 +68,7 @@ fn HomePage() -> impl IntoView {
     // Increment the counter using the AtomicU32
     let visitor_number = VISITOR_COUNTER.increment();
     let (command_history, set_command_history) = create_signal(vec![]);
+    let input_element: NodeRef<html::Input> = create_node_ref();
 
     view! {
         <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center">
@@ -76,10 +77,16 @@ fn HomePage() -> impl IntoView {
                 <Links/>
             </div>
             <section class="md:w-1/2 w-5/6 md:h-screen flex flex-col justify-center items-center">
-                <div class="flex flex-col border shadow-md shadow-black border-peach bg-base rounded-md w-full md:w-5/6 min-h-96 h-5/6">
+                <div
+                    class="flex flex-col border shadow-md shadow-black border-peach bg-base rounded-md w-full md:w-5/6 min-h-96 h-5/6"
+                    on:click=move |_| {
+                        let _ = input_element.get().expect("Input shoud be there to focus").focus();
+                    }
+                >
                     <p class="text-white m-2">"Type 'help' for available commands"</p>
                     <TerminalHistory command_history=command_history/>
                     <TerminalInput
+                        input_element=input_element
                         set_command_history=set_command_history
                         command_history=command_history
                     />
