@@ -1,4 +1,7 @@
-use crate::error_template::{AppError, ErrorTemplate};
+use crate::{
+    components::terminal::{TerminalHistory, TerminalInput},
+    error_template::{AppError, ErrorTemplate},
+};
 use lazy_static::lazy_static;
 use leptos::*;
 use leptos_meta::*;
@@ -33,11 +36,13 @@ pub fn App() -> impl IntoView {
     provide_meta_context();
 
     view! {
-
-
-        // injects a stylesheet into the document <head>
-        // id=leptos means cargo-leptos will hot-reload this stylesheet
         <Stylesheet id="leptos" href="/pkg/rabbitnook.css"/>
+        <Link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <Link rel="preconnect" href="https://fonts.gstatic.com"/>
+        <Link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+            rel="stylesheet"
+        />
 
         // sets the document title
         <Title text="RabbitNook"/>
@@ -46,10 +51,7 @@ pub fn App() -> impl IntoView {
         <Router fallback=|| {
             let mut outside_errors = Errors::default();
             outside_errors.insert_with_default_key(AppError::NotFound);
-            view! {
-                <ErrorTemplate outside_errors/>
-            }
-            .into_view()
+            view! { <ErrorTemplate outside_errors/> }.into_view()
         }>
             <main>
                 <Routes>
@@ -65,9 +67,72 @@ pub fn App() -> impl IntoView {
 fn HomePage() -> impl IntoView {
     // Increment the counter using the AtomicU32
     let visitor_number = VISITOR_COUNTER.increment();
+    let (command_history, set_command_history) = create_signal(vec![]);
+    let input_element: NodeRef<html::Input> = create_node_ref();
+    let domain = r#"
+ ____       _     _     _ _                     _    
+|  _ \ __ _| |__ | |__ (_) |_ _ __   ___   ___ | | __
+| |_) / _` | '_ \| '_ \| | __| '_ \ / _ \ / _ \| |/ /
+|  _ < (_| | |_) | |_) | | |_| | | | (_) | (_) |   < 
+|_| \_\__,_|_.__/|_.__/|_|\__|_| |_|\___/ \___/|_|\_\ v1.0.0
+    "#;
 
     view! {
-            <img src="/rabbitnook.jpg" alt="Rabbitnook"/>
-            <p>You are visitor number: { visitor_number }</p>
+        <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center">
+            <div class="md:w-1/2 w-5/6 flex flex-col justify-center items-center">
+                <NameHeader/>
+                <Links/>
+            </div>
+            <section class="md:w-1/2 w-5/6 md:h-screen flex flex-col justify-center items-center">
+                <div
+                    class="flex flex-col border shadow-md shadow-black border-peach bg-base rounded-md w-full md:w-5/6 min-h-96 h-5/6"
+                    on:click=move |_| {
+                        let _ = input_element.get().expect("Input shoud be there to focus").focus();
+                    }
+                >
+                    // <pre>
+                    //     <p class="text-white text-xs md:text-sm mx-2">{domain}</p>
+                    // </pre>
+                    <p class="text-white m-2">"Type 'help' for available commands."</p>
+                    <TerminalHistory command_history=command_history/>
+                    <TerminalInput
+                        input_element=input_element
+                        set_command_history=set_command_history
+                        command_history=command_history
+                    />
+                </div>
+                <p class="text-sky mt-4">You are visitor number: {visitor_number}</p>
+            </section>
+        </div>
+    }
+}
+
+#[component]
+fn NameHeader() -> impl IntoView {
+    view! {
+        <section class="flex flex-col m-4 md:p-4  items-start">
+            <h1 class="text-5xl md:text-8xl text-blue">hey there, Im</h1>
+            <h2 class="text-4xl md:text-7xl mt-2 font-semibold text-maroon">Oliver Säfström</h2>
+            <div class="h-1 m-1 w-40 md:w-60 bg-sky"></div>
+            <h3 class="md:text-xl ml-2 md:ml-4 text-green">fullstack developer</h3>
+        </section>
+        <img class="rounded-full w-2/3 max-w-[360px] m-7" src="/portrait.png" alt="Portrait"/>
+    }
+}
+#[component]
+fn Links() -> impl IntoView {
+    view! {
+        <section class="flex justify-between items-center w-40 m-4">
+            <a href="https://github.com/safstromo" target="_blank">
+                <img class="w-10" src="/github-mark-white.svg" alt="Github Link"/>
+            </a>
+            <a href="https://www.linkedin.com/in/safstromo" target="_blank">
+                <img class="w-10" src="/linkedin-white.svg" alt="Linkedin Link"/>
+            </a>
+            <a href="mailto: safstrom.oliver@gmail.com" target="_blank">
+                <img class="w-10" src="/gmail.svg" alt="Gmail Link"/>
+            </a>
+
+        </section>
     }
 }
