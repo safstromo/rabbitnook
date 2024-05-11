@@ -85,12 +85,13 @@ fn HomePage() -> impl IntoView {
                 <NameHeader/>
             </div>
             <section class="w-1/2 flex flex-col justify-center items-center">
-                <div class="flex flex-col border shadow-md border-peach bg-base rounded-md w-5/6 h-5/6">
+                <div class="flex flex-col border shadow-md shadow-black border-peach bg-base rounded-md w-5/6 h-5/6">
+                    <p class="text-white m-2">"Type 'help' for available commands"</p>
                     {move || command_history.get().is_empty().then(|| view! { <TerminalPwd/> })}
                     <TerminalHistory command_history=command_history/>
                     <TerminalInput set_command_history=set_command_history/>
                 </div>
-                <p class="text-xl text-sky">You are visitor number: {visitor_number}</p>
+                <p class="text-sky">You are visitor number: {visitor_number}</p>
             </section>
         </div>
     }
@@ -126,7 +127,7 @@ fn TerminalCommand(command: Command) -> impl IntoView {
     if command.component == HtmlTag::A {
         return view! {
             <TerminalPwd/>
-            <div class="flex flex-row">
+            <div class="flex flex-row mb-2">
                 <svg
                     class="w-6 h-6 text-green"
                     aria-hidden="true"
@@ -141,11 +142,11 @@ fn TerminalCommand(command: Command) -> impl IntoView {
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="m9 5 7 7-7 7 7 7-7 7"
+                        d="m9 5 7 7-7 7"
                     ></path>
                 </svg>
                 <li class="text-white">
-                    <a class="text-blue" href=command.value.clone()>
+                    <a class="text-blue" href=command.value.clone() target="_blank">
                         {command.value}
                     </a>
                 </li>
@@ -154,7 +155,7 @@ fn TerminalCommand(command: Command) -> impl IntoView {
     } else {
         return view! {
             <TerminalPwd/>
-            <div class="flex flex-row">
+            <div class="flex flex-row mb-2">
                 <svg
                     class="w-6 h-6 text-green"
                     aria-hidden="true"
@@ -169,7 +170,7 @@ fn TerminalCommand(command: Command) -> impl IntoView {
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="m9 5 7 7-7 7 7 7-7 7"
+                        d="m9 5 7 7-7 7"
                     ></path>
                 </svg>
                 <li class="text-white">
@@ -279,9 +280,6 @@ fn TerminalInput(set_command_history: WriteSignal<Vec<Command>>) -> impl IntoVie
                 set_command_history.update(|commands| commands.push(invalid_command));
             }
         }
-
-        // set_command_history.update(|commands| commands.push(Command(value.to_string())));
-        // set_input("".to_string());
     };
 
     view! {
