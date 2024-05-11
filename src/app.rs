@@ -78,6 +78,7 @@ fn HomePage() -> impl IntoView {
     // Increment the counter using the AtomicU32
     let visitor_number = VISITOR_COUNTER.increment();
     let (command_history, set_command_history) = create_signal(vec![]);
+
     view! {
         <div class="flex h-screen w-screen bg-base">
             <div class="w-1/2 flex flex-col justify-center items-center">
@@ -85,6 +86,7 @@ fn HomePage() -> impl IntoView {
             </div>
             <section class="w-1/2 flex flex-col justify-center items-center">
                 <div class="flex flex-col border shadow-md border-peach bg-base rounded-md w-5/6 h-5/6">
+                    {move || command_history.get().is_empty().then(|| view! { <TerminalPwd/> })}
                     <TerminalHistory command_history=command_history/>
                     <TerminalInput set_command_history=set_command_history/>
                 </div>
