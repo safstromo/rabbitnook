@@ -41,7 +41,7 @@ pub fn TerminalInput(
             set_command_history.update(|commands| commands.clear());
         }
 
-        match value.as_str() {
+        match value.to_lowercase().as_str() {
             "clear" => set_command_history.update(|commands| commands.clear()),
             "help" => {
                 let help_command = Command {
