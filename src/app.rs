@@ -69,13 +69,6 @@ fn HomePage() -> impl IntoView {
     let visitor_number = VISITOR_COUNTER.increment();
     let (command_history, set_command_history) = create_signal(vec![]);
     let input_element: NodeRef<html::Input> = create_node_ref();
-    let domain = r#"
- ____       _     _     _ _                     _    
-|  _ \ __ _| |__ | |__ (_) |_ _ __   ___   ___ | | __
-| |_) / _` | '_ \| '_ \| | __| '_ \ / _ \ / _ \| |/ /
-|  _ < (_| | |_) | |_) | | |_| | | | (_) | (_) |   < 
-|_| \_\__,_|_.__/|_.__/|_|\__|_| |_|\___/ \___/|_|\_\ v1.0.0
-    "#;
 
     view! {
         <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center">
@@ -101,7 +94,6 @@ fn HomePage() -> impl IntoView {
                         command_history=command_history
                     />
                 </div>
-                <p class="text-sky mt-4">You are visitor number: {visitor_number}</p>
             </section>
         </div>
     }
