@@ -57,6 +57,9 @@ fn HomePage() -> impl IntoView {
             <div class="md:w-1/2 w-5/6 flex flex-col justify-center items-center">
                 <NameHeader/>
                 <Links/>
+            <nav class="mt-4 text-white text-2xl font-semibold hover:border-peach border-base border-2 rounded-lg">
+            <a class="mx-1" href="/blog">Blog</a>
+            </nav>
             </div>
             <section class="md:w-1/2 w-5/6 md:h-screen flex flex-col justify-center items-center">
                 <div
@@ -65,9 +68,6 @@ fn HomePage() -> impl IntoView {
                         let _ = input_element.get().expect("Input shoud be there to focus").focus();
                     }
                 >
-                    // <pre>
-                    //     <p class="text-white text-xs md:text-sm mx-2">{domain}</p>
-                    // </pre>
                     <p class="text-white m-2">"Type 'help' for available commands."</p>
                     <TerminalHistory command_history=command_history/>
                     <TerminalInput
