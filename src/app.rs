@@ -7,11 +7,9 @@ use crate::{
     },
     error_template::{AppError, ErrorTemplate},
 };
-use lazy_static::lazy_static;
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
-use std::sync::atomic::{AtomicU32, Ordering};
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -57,9 +55,11 @@ fn HomePage() -> impl IntoView {
             <div class="md:w-1/2 w-5/6 flex flex-col justify-center items-center">
                 <NameHeader/>
                 <Links/>
-            <nav class="mt-4 text-white text-2xl font-semibold hover:border-peach border-base border-2 rounded-lg">
-            <a class="mx-1" href="/blog">Blog</a>
-            </nav>
+                <nav class="mt-4 text-white text-2xl font-semibold hover:border-peach border-base border-2 rounded-lg">
+                    <a class="mx-1 text-white" href="/blog">
+                        Blog
+                    </a>
+                </nav>
             </div>
             <section class="md:w-1/2 w-5/6 md:h-screen flex flex-col justify-center items-center">
                 <div
@@ -68,6 +68,7 @@ fn HomePage() -> impl IntoView {
                         let _ = input_element.get().expect("Input shoud be there to focus").focus();
                     }
                 >
+
                     <p class="text-white m-2">"Type 'help' for available commands."</p>
                     <TerminalHistory command_history=command_history/>
                     <TerminalInput
@@ -75,6 +76,7 @@ fn HomePage() -> impl IntoView {
                         set_command_history=set_command_history
                         command_history=command_history
                     />
+
                 </div>
             </section>
         </div>
