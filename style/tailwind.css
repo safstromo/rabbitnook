@@ -41,4 +41,7 @@
   h3 {
     @apply text-xl;
   }
+  code {
+    @apply text-white;
+  }
 }
