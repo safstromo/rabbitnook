@@ -683,7 +683,7 @@ fn main() -> Result<()> {
             </a>
             <h3 class="my-6">Final project</h3>
             <p>Here is the final project:</p>
-            <a class="hover:text-maroon underline mb-4" href="gihub">
+            <a class="hover:text-maroon underline mb-4" href="https://github.com/safstromo/esp32-aws-iot-relay">
                 esp32-aws-iot-relay
             </a>
             <p class="underline">Future improvments will be:</p>
