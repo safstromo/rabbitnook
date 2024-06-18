@@ -17,31 +17,38 @@ pub fn App() -> impl IntoView {
     provide_meta_context();
 
     view! {
-        <Stylesheet id="leptos" href="/pkg/rabbitnook.css"/>
-        <Link rel="preconnect" href="https://fonts.googleapis.com"/>
-        <Link rel="preconnect" href="https://fonts.gstatic.com"/>
-        <Link
-            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
-            rel="stylesheet"
-        />
+                        <Stylesheet id="leptos" href="/pkg/rabbitnook.css"/>
+                        <Link rel="preconnect" href="https://fonts.googleapis.com"/>
+                        <Link rel="preconnect" href="https://fonts.gstatic.com"/>
+                        <Link
+                            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+                            rel="stylesheet"
+                        />
+            <Link rel="stylesheet" href="//unpkg.com/@catppuccin/highlightjs@0.2.2/css/catppuccin-mocha.css"/>
+                <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"/>
+                <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"/>
+        <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js"/>
+    <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/es/languages/bash.min.js"/>
+                <Script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"/>
 
-        // sets the document title
-        <Title text="RabbitNook"/>
 
-        // content for this welcome page
-        <Router fallback=|| {
-            let mut outside_errors = Errors::default();
-            outside_errors.insert_with_default_key(AppError::NotFound);
-            view! { <ErrorTemplate outside_errors/> }.into_view()
-        }>
-            <main>
-                <Routes>
-                    <Route path="" view=HomePage/>
-                    <Route path="/blog" view=Blog/>
-                </Routes>
-            </main>
-        </Router>
-    }
+                        // sets the document title
+                        <Title text="RabbitNook"/>
+
+                        // content for this welcome page
+                        <Router fallback=|| {
+                            let mut outside_errors = Errors::default();
+                            outside_errors.insert_with_default_key(AppError::NotFound);
+                            view! { <ErrorTemplate outside_errors/> }.into_view()
+                        }>
+                            <main>
+                                <Routes>
+                                    <Route path="" view=HomePage/>
+                                    <Route path="/blog" view=Blog/>
+                                </Routes>
+                            </main>
+                        </Router>
+                    }
 }
 
 /// Renders the home page of your application.
@@ -63,7 +70,7 @@ fn HomePage() -> impl IntoView {
             </div>
             <section class="md:w-1/2 w-5/6 md:h-screen flex flex-col justify-center items-center">
                 <div
-                    class="flex flex-col border shadow-md shadow-black border-peach bg-base rounded-md w-full md:w-5/6 min-h-96 h-5/6"
+                    class="flex flex-col border shadow-md shadow-black border-peach rounded-md bg-base w-full md:w-5/6 min-h-96 h-5/6"
                     on:click=move |_| {
                         let _ = input_element.get().expect("Input shoud be there to focus").focus();
                     }
