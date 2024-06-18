@@ -66,7 +66,7 @@ fn HomePage() -> impl IntoView {
                 <NameHeader/>
                 <Links/>
                 <div class="w-44 mb-6">
-                    <a href="https://ko-fi.com/safstromo">
+                    <a href="https://ko-fi.com/safstromo" target="_blank">
                         <img src="kofi_button_blue.png"/>
                     </a>
                 </div>
