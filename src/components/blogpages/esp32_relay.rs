@@ -386,18 +386,11 @@ fn main() -> Result<()> {
 }
     "#;
 
-    let js_func = r#"
-                    document.addEventListener('DOMContentLoaded', (event) => {
-                        hljs.highlightAll();
-                    });
-                    "#;
-
     view! {
-        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-        <script>{js_func}</script>
 
         <div class="flex flex-col min-h-screen w-full bg-base items-start justify-center">
-            <h1 class="my-6">Rust "❤️" Esp32 remote relay using AWS IoT</h1>
+            <h1 class="mt-8">Rust "❤️" Esp32 remote relay using AWS IoT</h1>
+    <p class="my-2">June 20, 2024</p>
             <h2 class="my-6">In space no one can hear you scream</h2>
             <p>This is my first adventure into the world of embedded development. "🫠"</p>
             <p>

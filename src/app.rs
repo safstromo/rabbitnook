@@ -47,6 +47,7 @@ pub fn App() -> impl IntoView {
                 <Routes>
                     <Route path="" view=HomePage/>
                     <Route path="/blog" view=Blog/>
+                    <Route path="/blog/esp32-relay" view=Blog/>
                 </Routes>
             </main>
         </Router>
