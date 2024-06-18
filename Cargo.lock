@@ -1643,7 +1643,7 @@ dependencies = [
 
 [[package]]
 name = "rabbitnook"
-version = "1.0.2"
+version = "1.0.3"
 dependencies = [
  "axum",
  "console_error_panic_hook",
