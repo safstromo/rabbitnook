@@ -42,6 +42,6 @@
     @apply text-xl;
   }
   .code-block {
-    @apply px-4 border shadow-md shadow-black border-peach rounded-md my-3 max-w-full overflow-x-auto;
+    @apply px-4 border shadow-md shadow-black border-peach rounded-md my-6 max-w-full overflow-x-auto;
   }
 }

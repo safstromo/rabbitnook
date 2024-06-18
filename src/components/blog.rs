@@ -9,6 +9,10 @@ pub fn Blog() -> impl IntoView {
             <div class="md:w-2/3 w-5/6 flex flex-col justify-center items-center">
                 <Esp32Relay/>
                 <Links/>
+            <div
+        class="w-44 mb-6" >
+        <a href="https://ko-fi.com/safstromo"><img src="kofi_button_blue.png"/></a>
+            </div>
             </div>
         </div>
     }
