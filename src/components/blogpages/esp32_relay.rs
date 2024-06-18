@@ -387,10 +387,9 @@ fn main() -> Result<()> {
     "#;
 
     view! {
-
-        <div class="flex flex-col min-h-screen w-full bg-base items-start justify-center">
+        <div class="flex flex-col min-h-screen w-full max-w-5xl bg-base items-start justify-center">
             <h1 class="mt-8">Rust "❤️" Esp32 remote relay using AWS IoT</h1>
-    <p class="my-2">June 20, 2024</p>
+            <p class="my-2">June 20, 2024</p>
             <h2 class="my-6">In space no one can hear you scream</h2>
             <p>This is my first adventure into the world of embedded development. "🫠"</p>
             <p>
@@ -449,8 +448,13 @@ fn main() -> Result<()> {
                 I had not defined the correct permissions in the policy and the ESP32 could not connect to the AWS IoT endpoint. I had a hard time figuring out what was wrong and the log message from the ESP32 was not very helpful and the logs in AWS IoT did not give me any clues either.
             </p>
             <p>This is the log from the ESP32:</p>
-
-            <img class="my-6 rounded-md" src="/blog/esp32-relay/relay-log.png" alt="Image of log"/>
+            <a href="/blog/esp32-relay/relay-log.png" target="_blank">
+                <img
+                    class="my-6 rounded-md"
+                    src="/blog/esp32-relay/relay-log.png"
+                    alt="Image of log"
+                />
+            </a>
             <p>
                 After some trial and error I finally got it to work by using the following policy.
                 This allows all actions on all resources. This is not recommended in a production environment but for now it will do. I recommend starting with this and make sure everything works before fine tuning the policy.
@@ -683,7 +687,10 @@ fn main() -> Result<()> {
             </a>
             <h3 class="my-6">Final project</h3>
             <p>Here is the final project:</p>
-            <a class="hover:text-maroon underline mb-4" href="https://github.com/safstromo/esp32-aws-iot-relay">
+            <a
+                class="hover:text-maroon underline mb-4"
+                href="https://github.com/safstromo/esp32-aws-iot-relay"
+            >
                 esp32-aws-iot-relay
             </a>
             <p class="underline">Future improvments will be:</p>
