@@ -64,7 +64,13 @@ fn HomePage() -> impl IntoView {
             <div class="md:w-1/2 w-5/6 flex flex-col justify-center items-center">
                 <NameHeader/>
                 <Links/>
-                <nav class="mt-4 text-white text-2xl font-semibold hover:border-peach border-base border-2 rounded-lg">
+                <div class="w-44 mb-6">
+                    <a href="https://ko-fi.com/safstromo">
+                        <img src="kofi_button_blue.png"/>
+                    </a>
+                </div>
+
+                <nav class="mt-4 text-white text-2xl font-semibold hover:border-peach hover:text-maroon border-base border-2 rounded-lg">
                     <a class="mx-1 text-white" href="/blog">
                         Blog
                     </a>
