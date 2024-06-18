@@ -47,7 +47,7 @@ pub fn TerminalInput(
                 let help_command = Command {
                     command: value.clone(),
                     component: HtmlTag::P,
-                    value: "Available commands: help, pwd, git, vim, email, sudo, linkedin, clear"
+                    value: "Available commands: help, pwd, git, vim, email, blog, sudo, linkedin, clear"
                         .to_string(),
                     name: "help".to_string(),
                 };
@@ -117,7 +117,16 @@ pub fn TerminalInput(
                 };
                 set_command_history.update(|commands| commands.push(vim_command));
             }
-
+            "blog" => {
+                open_link("https://rabbitnook.com/blog".to_string());
+                let blog_command = Command {
+                    command: value.clone(),
+                    component: HtmlTag::A,
+                    value: "https://rabbitnook.com/blog".to_string(),
+                    name: "blog".to_string(),
+                };
+                set_command_history.update(|commands| commands.push(blog_command));
+            }
             _ => {
                 let invalid_command = Command {
                     command: value.clone(),
