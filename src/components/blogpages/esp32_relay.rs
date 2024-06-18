@@ -397,13 +397,16 @@ fn main() -> Result<()> {
         <script>{js_func}</script>
 
         <div class="flex flex-col min-h-screen w-full bg-base items-start justify-center">
-            <h1 class="my-6">Rust :heart: Esp32 remote relay using AWS IoT</h1>
+            <h1 class="my-6">Rust "❤️" Esp32 remote relay using AWS IoT</h1>
             <h2 class="my-6">In space no one can hear you scream</h2>
+            <p>This is my first adventure into the world of embedded development. "🫠"</p>
             <p>
-                This is my first adventure into the world of embedded development.'🫠'
                 This project is an experiment of how to control a relay using an ESP32 board and AWS IoT. The relay is connected to the ESP32 board and can be controlled using the AWS IoT MQTT protocol.
+            </p>
+            <p>
                 Im writing this blog post because i had a hard time finding examples and guides on the subject and to share my experience and to help others save time and avoid some of the pitfalls I encountered.
-                This is the first time I am writing embedded code and I am still learning so if you see any mistakes or have any suggestions please let me know. :smile:
+                This is the first time I am writing embedded code and I am still learning so if you see any mistakes or have any suggestions please let me know.
+                "😊"
             </p>
 
             <h2 class="my-6">Hardware</h2>
@@ -419,7 +422,13 @@ fn main() -> Result<()> {
             >
                 1-Relay 5V KY-019-Module
             </a>
-            <img src="/blog/esp32-relay/hardware.png" alt="Image of hardware"/>
+            <a href="/blog/esp32-relay/hardware.jpg" target="_blank">
+                <img
+                    class="my-6 rounded-md"
+                    src="/blog/esp32-relay/hardware.jpg"
+                    alt="Image of hardware"
+                />
+            </a>
             <h2 class="my-6">AWS IoT setup</h2>
             <p>First thing we need to do is creating a Policy and a Thing in AWS IoT.</p>
 
@@ -430,14 +439,20 @@ fn main() -> Result<()> {
                 <li>3. Name your policy and go to JSON view.</li>
             </ol>
 
-            <img src="/blog/esp32-relay/policy-view.png" alt="Image of policy"/>
+            <a href="/blog/esp32-relay/policy.png" target="_blank">
+                <img
+                    class="my-6 rounded-md"
+                    src="/blog/esp32-relay/policy.png"
+                    alt="Image of policy"
+                />
+            </a>
             <p>
                 Here you define what the thing is allowed to do.
                 This is where my first pitfall was.
                 I had not defined the correct permissions in the policy and the ESP32 could not connect to the AWS IoT endpoint. I had a hard time figuring out what was wrong and the log message from the ESP32 was not very helpful and the logs in AWS IoT did not give me any clues either.
             </p>
 
-            <img src="/blog/esp32-relay/log.png" alt="Image of log"/>
+            <img class="my-6 rounded-md" src="/blog/esp32-relay/relay-log.png" alt="Image of log"/>
             <p>
                 After some trial and error I finally got it to work by using the following policy.
                 This allows all actions on all resources. This is not recommended in a production environment but for now it will do. I recommend starting with this and make sure everything works before fine tuning the policy.
@@ -457,6 +472,13 @@ fn main() -> Result<()> {
                 </pre>
             </div>
 
+            <a href="/blog/esp32-relay/policy-final.png" target="_blank">
+                <img
+                    class="my-6 rounded-md"
+                    src="/blog/esp32-relay/policy-final.png"
+                    alt="Image of final policy"
+                />
+            </a>
             <p>
                 This will allow the ESP32 to connect, subscribe and receive messages on the topic
                 "esp32/sub" and publish messages on the topic "esp32/pub" .
@@ -472,37 +494,74 @@ fn main() -> Result<()> {
                     .
                 </li>
                 <li>
-                    <img src="/blog/esp32-relay/create-thing.png" alt="Image of create1"/>
+                    <a href="/blog/esp32-relay/create-thing.png" target="_blank">
+                        <img
+                            class="my-6 rounded-md"
+                            src="/blog/esp32-relay/create-thing.png"
+                            alt="Image of create1"
+                        />
+                    </a>
                 </li>
                 <li>
-                    <img src="/blog/esp32-relay/create-thing2.png" alt="Image of create2"/>
+                    <a href="/blog/esp32-relay/create-thing2.png" target="_blank">
+                        <img
+                            class="my-6 rounded-md"
+                            src="/blog/esp32-relay/create-thing2.png"
+                            alt="Image of create2"
+                        />
+                    </a>
                 </li>
 
                 <li>3. Name your thing and click "Next" .</li>
                 <li>
-                    <img src="/blog/esp32-relay/create-thing3.png" alt="Image of create3"/>
+                    <a href="/blog/esp32-relay/create-thing3.png" target="_blank">
+                        <img
+                            class="my-6 rounded-md"
+                            src="/blog/esp32-relay/create-thing3.png"
+                            alt="Image of create3"
+                        />
+                    </a>
                 </li>
                 <li>4. Select "Auto-generate a new certificate" and click "Next" .</li>
                 <li>
-                    <img src="/blog/esp32-relay/create-thing4.png" alt="Image of create4"/>
+                    <a href="/blog/esp32-relay/create-thing4.png" target="_blank">
+                        <img
+                            class="my-6 rounded-md"
+                            src="/blog/esp32-relay/create-thing4.png"
+                            alt="Image of create4"
+                        />
+                    </a>
                 </li>
                 <li>
                     5. Next up we need to assign the policy we created earlier to the thing. Select the policy and click
                     "Create thing" .
                 </li>
                 <li>
-                    <img src="/blog/esp32-relay/create-thing5.png" alt="Image of create5"/>
+                    <a href="/blog/esp32-relay/create-thing5.png" target="_blank">
+                        <img
+                            class="my-6 rounded-md"
+                            src="/blog/esp32-relay/create-thing5.png"
+                            alt="Image of create5"
+                        />
+                    </a>
                 </li>
                 <li>
                     6. Now a popup will appear where we can download the certificates and keys. Download device certificate, private key and root CA 1 certificate. Dont forget to rename them so you know which is which.
                 </li>
                 <li>
-                    <img src="/blog/esp32-relay/create-thing6.png" alt="Image of create6"/>
+                    <a href="/blog/esp32-relay/create-thing6.png" target="_blank">
+                        <img
+                            class="my-6 rounded-md"
+                            src="/blog/esp32-relay/create-thing6.png"
+                            alt="Image of create6"
+                        />
+                    </a>
                 </li>
             </ol>
             <h2 class="my-6">Coding</h2>
             <p>
-                Now we have everything set up in AWS IoT and we can start with the fun part, coding the ESP32. I will write this in Rust because I love Rust so why not :shrug:
+                Now we have everything set up in AWS IoT and we can start with the fun part, coding the ESP32. I will write this in Rust because I love Rust so why not
+                "🤷"
             </p>
             <h3 class="my-6">Project setup</h3>
             <p>
@@ -585,7 +644,7 @@ fn main() -> Result<()> {
                 </pre>
             </div>
             <p>
-                First we set up the GPIO pins for the relay and the button(the two wires :smile:) . The relay is connected to GPIO10 and the button is connected to GPIO19. Im setting the button to pull up so it will be high when not pressed and low when pressed. High means its not pressed and low means its pressed. The relay is set to low so it is not activated when the ESP32 starts.
+                First we set up the GPIO pins for the relay and the button(the two wires "😏") . The relay is connected to GPIO10 and the button is connected to GPIO19. Im setting the button to pull up so it will be high when not pressed and low when pressed. High means its not pressed and low means its pressed. The relay is set to low so it is not activated when the ESP32 starts.
             </p>
             <p>
                 I had to use a Arc Mutex to be able to share the relay pin between the main loop and the mqtt callback. I then clone the arc to create a reference for the mqtt callback.
@@ -613,7 +672,13 @@ fn main() -> Result<()> {
             </p>
             <p>Now we can test using AWS MQTT test client.</p>
 
-            <img src="/blog/esp32-relay/mqtt-test.png" alt="Image of mqtt-test"/>
+            <a href="/blog/esp32-relay/mqtt-test.png" target="_blank">
+                <img
+                    class="my-6 rounded-md"
+                    src="/blog/esp32-relay/mqtt-test.png"
+                    alt="Image of mqtt-test"
+                />
+            </a>
             <h3 class="my-6">Final project</h3>
             <p>Here is the final project:</p>
             <a class="hover:text-maroon underline" href="gihub">
@@ -623,9 +688,10 @@ fn main() -> Result<()> {
                 I hope this blog post was helpful and hope it will save someone some time and frustration.
             </p>
             <p>
-                If you have suggestions or improvements feel free to create a PR,open an issue or contact me :smile:
+                If you have suggestions or improvements feel free to create a PR,open an issue or contact me
+                "😉"
             </p>
-            <p>Happy coding! :smile:</p>
+            <p>Happy coding! "😊"</p>
 
             <h2 class="my-6">Useful links</h2>
             <ul>
