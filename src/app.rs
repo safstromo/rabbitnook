@@ -1,15 +1,31 @@
-use crate::{
-    components::{
-        blog::Blog,
-        links::Links,
-        name_header::NameHeader,
-        terminal::{TerminalHistory, TerminalInput},
-    },
-    error_template::{AppError, ErrorTemplate},
+use crate::components::{
+    blog::Blog,
+    links::Links,
+    name_header::NameHeader,
+    terminal::{TerminalHistory, TerminalInput},
 };
-use leptos::*;
+use leptos::prelude::*;
 use leptos_meta::*;
+use leptos_router::components::{Route, Router, Routes};
 use leptos_router::*;
+
+pub fn shell(options: LeptosOptions) -> impl IntoView {
+    view! {
+        <!DOCTYPE html>
+        <html lang="en">
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <AutoReload options=options.clone() />
+                <HydrationScripts options/>
+                <MetaTags/>
+            </head>
+            <body>
+                <App/>
+            </body>
+        </html>
+    }
+}
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -37,17 +53,12 @@ pub fn App() -> impl IntoView {
         // sets the document title
         <Title text="RabbitNook"/>
 
-        // content for this welcome page
-        <Router fallback=|| {
-            let mut outside_errors = Errors::default();
-            outside_errors.insert_with_default_key(AppError::NotFound);
-            view! { <ErrorTemplate outside_errors/> }.into_view()
-        }>
+                        <Router>
             <main>
-                <Routes>
-                    <Route path="" view=HomePage/>
-                    <Route path="/blog" view=Blog/>
-                    <Route path="/blog/esp32-relay" view=Blog/>
+                <Routes fallback=|| "Not Found">
+                    <Route path=path!("") view=HomePage/>
+                    <Route path=path!("/blog") view=Blog/>
+                    <Route path=path!("/blog/esp32-relay") view=Blog/>
                 </Routes>
             </main>
         </Router>
@@ -57,8 +68,9 @@ pub fn App() -> impl IntoView {
 /// Renders the home page of your application.
 #[component]
 fn HomePage() -> impl IntoView {
-    let (command_history, set_command_history) = create_signal(vec![]);
-    let input_element: NodeRef<html::Input> = create_node_ref();
+    let (command_history, set_command_history) = signal(vec![]);
+
+    let input_element = NodeRef::new();
 
     view! {
         <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center">

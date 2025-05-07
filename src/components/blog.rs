@@ -1,3 +1,4 @@
+use leptos::prelude::*;
 use leptos::{component, view, IntoView};
 
 use crate::components::{blogpages::esp32_relay::Esp32Relay, links::Links};

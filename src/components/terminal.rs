@@ -1,5 +1,7 @@
 use leptos::*;
 
+use leptos::prelude::*;
+
 #[derive(Debug, Clone)]
 pub struct Command {
     command: String,
@@ -20,7 +22,7 @@ pub fn TerminalInput(
     command_history: ReadSignal<Vec<Command>>,
     input_element: NodeRef<html::Input>,
 ) -> impl IntoView {
-    let (input, _set_input) = create_signal("".to_string());
+    let (input, _set_input) = signal("".to_string());
     // let input_element: NodeRef<html::Input> = create_node_ref();
 
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
@@ -28,7 +30,8 @@ pub fn TerminalInput(
         ev.prevent_default();
 
         // here, we'll extract the value from the input
-        let value = input_element()
+        let value = input_element
+            .get()
             // event handlers can only fire after the view
             // is mounted to the DOM, so the `NodeRef` will be `Some`
             .expect("<input> should be mounted")
@@ -137,7 +140,8 @@ pub fn TerminalInput(
                 set_command_history.update(|commands| commands.push(invalid_command));
             }
         }
-        let _ = input_element()
+        let _ = input_element
+            .get()
             .expect("input element should be mounted")
             .set_value("");
     };
@@ -170,7 +174,7 @@ pub fn TerminalInput(
                     value=input
                     node_ref=input_element
                     id="terminal-input"
-                    autoFocus
+                    autofocus
                 />
             // TODO: Add caret
             // <span class="caret"></span>
@@ -180,7 +184,7 @@ pub fn TerminalInput(
 }
 
 fn open_link(url: String) {
-    create_effect(move |_| {
+    Effect::new(move |_| {
         let window = web_sys::window().expect("window should be available");
         window.open_with_url_and_target(&url, "_blank").unwrap();
     });
@@ -190,7 +194,7 @@ fn open_link(url: String) {
 pub fn TerminalHistory(command_history: ReadSignal<Vec<Command>>) -> impl IntoView {
     view! {
         <ul class="overflow-hidden">
-            <For each=command_history key=|command| command.command.clone() let:child>
+            <For each= move || command_history.get() key=|command| command.command.clone() let:child>
                 <TerminalCommand command=child/>
             </For>
 
