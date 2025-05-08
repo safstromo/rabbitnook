@@ -11,6 +11,6 @@ pub fn NameHeader() -> impl IntoView {
             <div class="h-1 m-1 w-40 md:w-60 bg-sky"></div>
             <h3 class="md:text-xl ml-2 md:ml-4 text-green">fullstack developer</h3>
         </section>
-        <img class="rounded-full w-2/3 max-w-[360px] m-7" src="/portrait.png" alt="Portrait"/>
+        <img class="rounded-full w-2/3 max-w-[360px] m-7" src="/portrait.png" alt="Portrait" />
     }
 }

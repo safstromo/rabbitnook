@@ -16,11 +16,11 @@ pub fn Blog() -> impl IntoView {
         <script>{js_func}</script>
         <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center">
             <div class="md:w-2/3 w-5/6 flex flex-col justify-center items-center">
-                <Esp32Relay/>
-                <Links/>
+                <Esp32Relay />
+                <Links />
                 <div class="w-44 mb-6">
                     <a href="https://ko-fi.com/safstromo" target="_blank">
-                        <img src="kofi_button_blue.png"/>
+                        <img src="kofi_button_blue.png" />
                     </a>
                 </div>
             </div>

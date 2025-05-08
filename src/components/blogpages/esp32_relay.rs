@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use leptos::{component, view, IntoView};
+use leptos::{IntoView, component, view};
 
 #[component]
 pub fn Esp32Relay() -> impl IntoView {
@@ -389,7 +389,7 @@ fn main() -> Result<()> {
 
     view! {
         <div class="flex flex-col min-h-screen w-full max-w-5xl bg-base items-start justify-center">
-            <h1 class="mt-8">Rust "❤️" Esp32 remote relay using AWS IoT</h1>
+            <h1 class="mt-8">"Rust ""❤️""Esp32 remote relay using AWS IoT"</h1>
             <p class="my-2">June 20, 2024</p>
             <h2 class="my-6">In space no one can hear you scream</h2>
             <p>This is my first adventure into the world of embedded development. "🫠"</p>
@@ -432,7 +432,7 @@ fn main() -> Result<()> {
             <h3 class="my-6">Create a Policy</h3>
             <ol>
                 <li>"1. Go to the AWS IoT console and click on `Security` in the left menu."</li>
-                <li>"2. Click on `Policies` and then `Create a policy`" .</li>
+                <li>"2. Click on `Policies` and then `Create a policy`."</li>
                 <li>3. Name your policy and go to JSON view.</li>
             </ol>
 
@@ -634,7 +634,7 @@ fn main() -> Result<()> {
             </p>
 
             <h3 class="my-6">Wifi</h3>
-            <p>"wifi.rs" will contain the wifi setup and the reconnect function.</p>
+            <p>"'wifi.rs' will contain the wifisetup and the reconnect function."</p>
 
             <div class="code-block">
                 <pre>
@@ -648,7 +648,7 @@ fn main() -> Result<()> {
                 crate is used for interacting with the GPIO and other peripherals. These are great crates for someone new to embedded development like me since they abstract away a lot of the complexity of embedded development."
             </p>
             <h3 class="my-6">Main</h3>
-            <p>"main.rs" will contain the main logic of the project.</p>
+            <p>"'main.rs' will contain the main logic of the project."</p>
 
             <div class="code-block">
                 <pre>

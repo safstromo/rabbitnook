@@ -147,7 +147,7 @@ pub fn TerminalInput(
     };
 
     view! {
-        <TerminalPwd/>
+        <TerminalPwd />
         <section class="flex flex-row w-full">
             <svg
                 class="w-6 h-6 text-green"
@@ -194,8 +194,8 @@ fn open_link(url: String) {
 pub fn TerminalHistory(command_history: ReadSignal<Vec<Command>>) -> impl IntoView {
     view! {
         <ul class="overflow-hidden">
-            <For each= move || command_history.get() key=|command| command.command.clone() let:child>
-                <TerminalCommand command=child/>
+            <For each=move || command_history.get() key=|command| command.command.clone() let:child>
+                <TerminalCommand command=child />
             </For>
 
         </ul>
@@ -206,7 +206,7 @@ pub fn TerminalHistory(command_history: ReadSignal<Vec<Command>>) -> impl IntoVi
 fn TerminalCommand(command: Command) -> impl IntoView {
     if command.component == HtmlTag::A {
         return view! {
-            <TerminalPwd/>
+            <TerminalPwd />
             <div class="flex flex-row mb-2">
                 <svg
                     class="w-6 h-6 text-green"
@@ -234,7 +234,7 @@ fn TerminalCommand(command: Command) -> impl IntoView {
         };
     } else {
         return view! {
-            <TerminalPwd/>
+            <TerminalPwd />
             <div class="flex flex-row mb-2">
                 <svg
                     class="w-6 h-6 text-green"
