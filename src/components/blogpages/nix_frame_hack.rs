@@ -87,7 +87,7 @@ adb -d shell settings put secure screensaver_activate_on_sleep 1
                     </div>
                     <h2 class="my-6">"Installing software:"</h2>
                     <p>You will need ADB(Android Debug Bridge) to connect to the device.</p>
-                    <ol>
+                    <ol class="flex flex-col w-full">
                         <li class="mt-2">
                             <h4 class="text-lg my-6">1. Disable NixPlay applications.</h4>
                             <p>
@@ -221,7 +221,7 @@ adb -d shell settings put secure screensaver_activate_on_sleep 1
     };
     view! {
         <Script id="hljs-src" async_="true" src="../highlight.min.js" />
-        <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center">
+        <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center overflow-x-auto">
             <div class="md:w-2/3 w-5/6 flex flex-col justify-center items-center mb-4">
                 <Suspense fallback=move || view! { <p>"Loading blog..."</p> }>{blog_view}</Suspense>
                 <Links />
