@@ -6,10 +6,12 @@
 
 @layer components {
   @keyframes blink {
+
     0%,
     100% {
       opacity: 0;
     }
+
     50% {
       opacity: 1;
     }
@@ -23,6 +25,7 @@
     border-left: 0.2rem solid white;
     animation: blink 1s infinite;
   }
+
   p,
   h1,
   h2,
@@ -35,12 +38,15 @@
   h1 {
     @apply text-4xl;
   }
+
   h2 {
     @apply text-2xl;
   }
+
   h3 {
     @apply text-xl;
   }
+
   .code-block {
     @apply px-4 border shadow-md shadow-black border-peach rounded-md my-6 max-w-full overflow-x-auto text-xs md:text-base;
   }
