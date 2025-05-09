@@ -1,5 +1,6 @@
 # Get started with a build env with Rust nightly
 FROM rustlang/rust:nightly-alpine as builder
+ENV LEPTOS_TAILWIND_VERSION=v4.1.6
 
 RUN apk update && \
     apk add --no-cache bash curl npm libc-dev binaryen

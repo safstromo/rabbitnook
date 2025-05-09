@@ -231,7 +231,8 @@ fn TerminalCommand(command: Command) -> impl IntoView {
                     </a>
                 </li>
             </div>
-        };
+        }
+        .into_any();
     } else {
         return view! {
             <TerminalPwd />
@@ -257,7 +258,8 @@ fn TerminalCommand(command: Command) -> impl IntoView {
                     <p class="text-white mx-2">{command.value}</p>
                 </li>
             </div>
-        };
+        }
+        .into_any();
     }
 }
 
