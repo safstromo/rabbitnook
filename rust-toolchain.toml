@@ -2,4 +2,3 @@
 [toolchain]
 channel = "nightly"
 targets = ["wasm32-unknown-unknown"]
-
