@@ -1,10 +1,23 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@import "https://www.nerdfonts.com/assets/css/webfont.css";
+@theme {
+  --font-sans: JetBrains Mono, monospace;
+  --color-base: #1E1E2E;
+  --color-sky: #91d7e3;
+  --color-blue: #8aadf4;
+  --color-maroon: #ee99a0;
+  --color-peach: #f5a97f;
+  --color-green: #a6da95;
+  --color-teal: #8bd5ca;
+  --color-surface: #363a4f;
+  --color-pink: #f5bde6;
+  --color-midnight: #121063;
+}
 
 @layer components {
+
+  @import "https://www.nerdfonts.com/assets/css/webfont.css";
+
   @keyframes blink {
 
     0%,
@@ -48,6 +61,7 @@
   }
 
   .code-block {
-    @apply px-4 border shadow-md shadow-black border-peach rounded-md my-6 max-w-full overflow-x-auto text-xs md:text-base;
+    @apply px-4 border shadow-md shadow-black rounded-md my-6 max-w-full overflow-x-auto text-xs md:text-base;
+    border-color: var(--color-peach);
   }
 }
