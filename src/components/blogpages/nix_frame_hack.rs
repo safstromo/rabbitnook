@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 use leptos_meta::Script;
+use leptos_router::components::A;
 
 use crate::components::links::Links;
 
@@ -47,7 +48,7 @@ adb -d shell settings put secure screensaver_activate_on_sleep 1
                     <p>
                         "After searching around a bit i found this youtube video by "
                         <a
-                            class="underline"
+                            class="hover:text-maroon underline"
                             href="https://youtu.be/TN5errM5UbA?si=ZpgWuQo7wNWGoUP8"
                             target="_blank"
                         >
@@ -57,11 +58,16 @@ adb -d shell settings put secure screensaver_activate_on_sleep 1
                     <p>
                         The NixPlay frame is apparently an Android device, its running Android 7 to we can get some more use of it.
                     </p>
-                    <img src="Image" alt="NixPlay Frame" class="my-6 rounded-md" />
                     <p>This is a quick overview how i went about it.</p>
                     <h2 class="my-6">Open the frame</h2>
                     <p>"My Model:"</p>
-                    <img src="Image" alt="NixPlay Frame Model" class="my-6 rounded-md" />
+                    <div class="flex justify-center items-center w-full">
+                        <img
+                            src="/blog/nix-frame/model.jpg"
+                            alt="NixPlay Frame Model"
+                            class="my-6 rounded-md max-h-72"
+                        />
+                    </div>
                     <p>
                         Its easy to open the frame. I used a opening tool from iFixit, went along the frame and pried it open. There is a plastic clip about every 1-2cm.
                     </p>
@@ -72,7 +78,13 @@ adb -d shell settings put secure screensaver_activate_on_sleep 1
                         When you get it open you can carefully lift the screen and you will see the pcb under it.
                     </p>
                     <p>Here you will find a debug usb port to connect to.</p>
-                    <img src="Image" alt="NixPlay Frame PCB" class="my-6 rounded-md" />
+                    <div class="flex justify-center items-center w-full">
+                        <img
+                            src="/blog/nix-frame/nix_pcb.jpg"
+                            alt="NixPlay Frame PCB"
+                            class="my-6 rounded-md max-screen"
+                        />
+                    </div>
                     <h2 class="my-6">"Installing software:"</h2>
                     <p>You will need ADB(Android Debug Bridge) to connect to the device.</p>
                     <ol>
@@ -99,16 +111,24 @@ adb -d shell settings put secure screensaver_activate_on_sleep 1
                             </div>
                             <p class="mb-2">For me this is the applications i installed:</p>
                             <p class="underline">"Applauncher"</p>
-                            <a class="mb-4" href="https://novalauncher.com/" target="_blank">
+                            <a
+                                class="mb-4 hover:text-maroon"
+                                href="https://novalauncher.com/"
+                                target="_blank"
+                            >
                                 Nova Launcher
                             </a>
                             <p class="underline">"RDP software"</p>
-                            <a class="mb-4" href="https://rustdesk.com/" target="_blank">
+                            <a
+                                class="mb-4 hover:text-maroon"
+                                href="https://rustdesk.com/"
+                                target="_blank"
+                            >
                                 RustDesk
                             </a>
                             <p class="underline">Files</p>
                             <a
-                                class="mb-4"
+                                class="mb-4 hover:text-maroon"
                                 href="https://github.com/zhanghai/MaterialFiles"
                                 target="_blank"
                             >
@@ -116,7 +136,7 @@ adb -d shell settings put secure screensaver_activate_on_sleep 1
                             </a>
                             <p class="underline">Screensaver software for viewing images</p>
                             <a
-                                class="mb-4"
+                                class="mb-4 hover:text-maroon"
                                 href="https://github.com/theothernt/AerialViews"
                                 target="_blank"
                             >
@@ -138,7 +158,10 @@ adb -d shell settings put secure screensaver_activate_on_sleep 1
                             <h4 class="text-lg my-6">4. Other settings</h4>
                             <p>
                                 Now you can use
-                                <a class="underline" href="https://github.com/Genymobile/scrcpy">
+                                <a
+                                    class="underline hover:text-maroon"
+                                    href="https://github.com/Genymobile/scrcpy"
+                                >
                                     scrcpy
                                 </a>to control your screen through adb.
                             </p>
@@ -168,7 +191,13 @@ adb -d shell settings put secure screensaver_activate_on_sleep 1
                         </li>
                     </ol>
                     <p>This is the result:</p>
-                    <img src="Image" alt="Result" class="my-6 rounded-md" />
+                    <div class="flex justify-center items-center w-full">
+                        <img
+                            src="/blog/nix-frame/result.jpg"
+                            alt="Result"
+                            class="my-6 rounded-md max-h-screen"
+                        />
+                    </div>
                     <p>
                         I hope this helps someone out there that dont want to waste another perfectly fine device.
                     </p>
@@ -191,9 +220,9 @@ adb -d shell settings put secure screensaver_activate_on_sleep 1
         })
     };
     view! {
-        <Script id="hljs-src" async_="true" src="/highlight.min.js" />
+        <Script id="hljs-src" async_="true" src="../highlight.min.js" />
         <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center">
-            <div class="md:w-2/3 w-5/6 flex flex-col justify-center items-center">
+            <div class="md:w-2/3 w-5/6 flex flex-col justify-center items-center mb-4">
                 <Suspense fallback=move || view! { <p>"Loading blog..."</p> }>{blog_view}</Suspense>
                 <Links />
                 <div class="w-44 mb-6">
@@ -201,6 +230,9 @@ adb -d shell settings put secure screensaver_activate_on_sleep 1
                         <img src="../kofi_button_blue.png" />
                     </a>
                 </div>
+                <A href="/">
+                    <p class="underline">Home</p>
+                </A>
             </div>
         </div>
     }

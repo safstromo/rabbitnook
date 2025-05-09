@@ -1,3 +1,4 @@
+use crate::components::blogpages::esp32_relay::Esp32Relay;
 use crate::components::blogpages::nix_frame_hack::NixFrameHack;
 use crate::components::{
     blog::Blog,
@@ -54,7 +55,7 @@ pub fn App() -> impl IntoView {
                 <Routes fallback=|| "Not Found">
                     <Route path=path!("") view=HomePage />
                     <Route path=path!("/blog") view=Blog ssr=SsrMode::Async />
-                    <Route path=path!("/blog/esp32-relay") view=Blog ssr=SsrMode::Async />
+                    <Route path=path!("/blog/esp32-relay") view=Esp32Relay ssr=SsrMode::Async />
                     <Route
                         path=path!("/blog/nix-frame-hack")
                         view=NixFrameHack
@@ -84,7 +85,7 @@ fn HomePage() -> impl IntoView {
                     </a>
                 </div>
 
-                <nav class="my-4 text-white text-2xl font-semibold hover:border-peach border-base border-2 rounded-lg">
+                <nav class="my-2 text-white text-2xl font-semibold hover:border-peach border-base border-2 rounded-lg">
                     <a class="mx-1 text-white hover:text-maroon" href="/blog">
                         Blog
                     </a>
@@ -97,7 +98,6 @@ fn HomePage() -> impl IntoView {
                         let _ = input_element.get().expect("Input shoud be there to focus").focus();
                     }
                 >
-
                     <p class="text-white m-2">"Type 'help' for available commands."</p>
                     <TerminalHistory command_history=command_history />
                     <TerminalInput

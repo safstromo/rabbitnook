@@ -1,6 +1,9 @@
 use leptos::prelude::*;
 use leptos::{component, view, IntoView};
 use leptos_meta::Script;
+use leptos_router::components::A;
+
+use crate::components::links::Links;
 
 #[component]
 pub fn Esp32Relay() -> impl IntoView {
@@ -408,7 +411,7 @@ if (window.hljs) {
             });
             view! {
                 <div class="flex flex-col min-h-screen w-full max-w-5xl bg-base items-start justify-center">
-                    <h1 class="mt-8">"Rust ""❤️""Esp32 remote relay using AWS IoT"</h1>
+                    <h1 class="mt-8">"Rust ""❤️"" Esp32 remote relay using AWS IoT"</h1>
                     <p class="my-2">June 20, 2024</p>
                     <h2 class="my-6">In space no one can hear you scream</h2>
                     <p>This is my first adventure into the world of embedded development. "🫠"</p>
@@ -778,7 +781,20 @@ if (window.hljs) {
     };
 
     view! {
-        <Script id="hljs-src" async_="true" src="highlight.min.js" />
-        <Suspense fallback=move || view! { <p>"Loading blog..."</p> }>{blog_view}</Suspense>
+        <Script id="hljs-src" async_="true" src="../highlight.min.js" />
+        <div class="flex md:flex-row flex-col min-h-screen w-full bg-base items-center justify-center">
+            <div class="md:w-2/3 w-5/6 flex flex-col justify-center items-center mb-4">
+                <Suspense fallback=move || view! { <p>"Loading blog..."</p> }>{blog_view}</Suspense>
+                <Links />
+                <div class="w-44 mb-6">
+                    <a href="https://ko-fi.com/safstromo" target="_blank">
+                        <img src="../kofi_button_blue.png" />
+                    </a>
+                </div>
+                <A href="/">
+                    <p class="underline">Home</p>
+                </A>
+            </div>
+        </div>
     }
 }
