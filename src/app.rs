@@ -1,3 +1,4 @@
+use crate::components::blogpages::nix_frame_hack::NixFrameHack;
 use crate::components::{
     blog::Blog,
     links::Links,
@@ -44,12 +45,6 @@ pub fn App() -> impl IntoView {
             rel="stylesheet"
             href="//unpkg.com/@catppuccin/highlightjs@0.2.2/css/catppuccin-mocha.css"
         />
-        <Script
-            src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"
-            integrity="sha512-EBLzUL8XLl+va/zAsmXwS7Z2B1F9HUHkZwyS/VKwh3S7T/U0nF4BaU29EP/ZSf6zgiIxYAnKLu6bJ8dqpmX5uw=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
-        />
 
         // sets the document title
         <Title text="RabbitNook" />
@@ -58,8 +53,13 @@ pub fn App() -> impl IntoView {
             <main>
                 <Routes fallback=|| "Not Found">
                     <Route path=path!("") view=HomePage />
-                    <Route path=path!("/blog") view=Blog />
-                // <Route path=path!("/blog/esp32-relay") view=Blog/>
+                    <Route path=path!("/blog") view=Blog ssr=SsrMode::Async />
+                    <Route path=path!("/blog/esp32-relay") view=Blog ssr=SsrMode::Async />
+                    <Route
+                        path=path!("/blog/nix-frame-hack")
+                        view=NixFrameHack
+                        ssr=SsrMode::Async
+                    />
                 </Routes>
             </main>
         </Router>
