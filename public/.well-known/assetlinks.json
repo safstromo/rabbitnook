@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.rabbitnook.storais",
+      "sha256_cert_fingerprints": [
+        "86:49:25:3F:92:D5:74:46:68:47:3D:CE:CA:2B:52:B3:60:61:3B:F2:89:10:BB:BD:9A:C4:BE:7D:83:16:EC:3C"
+      ]
+    }
+  }
+]
