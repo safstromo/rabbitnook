@@ -2,6 +2,7 @@ use crate::components::blogpages::esp32_relay::Esp32Relay;
 use crate::components::blogpages::nix_frame_hack::NixFrameHack;
 use crate::components::{
     blog::Blog,
+    kofi::KofiButton,
     links::Links,
     name_header::NameHeader,
     terminal::{TerminalHistory, TerminalInput},
@@ -79,11 +80,7 @@ fn HomePage() -> impl IntoView {
             <div class="md:w-1/2 w-5/6 flex flex-col justify-center items-center">
                 <NameHeader />
                 <Links />
-                <div class="w-44 mb-4">
-                    <a href="https://ko-fi.com/safstromo" target="_blank">
-                        <img src="kofi_button_blue.png" />
-                    </a>
-                </div>
+                <KofiButton />
 
                 <nav class="my-2 text-white text-2xl font-semibold hover:border-peach border-base border-2 rounded-lg">
                     <a class="mx-1 text-white hover:text-maroon" href="/blog">
@@ -95,7 +92,9 @@ fn HomePage() -> impl IntoView {
                 <div
                     class="flex flex-col border shadow-md shadow-black border-peach rounded-md bg-base w-full md:w-5/6 min-h-96 h-5/6"
                     on:click=move |_| {
-                        let _ = input_element.get().expect("Input shoud be there to focus").focus();
+                        if let Some(input) = input_element.get() {
+                            let _ = input.focus();
+                        }
                     }
                 >
                     <p class="text-white m-2">"Type 'help' for available commands."</p>
@@ -103,7 +102,6 @@ fn HomePage() -> impl IntoView {
                     <TerminalInput
                         input_element=input_element
                         set_command_history=set_command_history
-                        command_history=command_history
                     />
 
                 </div>

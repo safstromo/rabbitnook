@@ -1,201 +1,145 @@
-use leptos::*;
-
+use leptos::html;
 use leptos::prelude::*;
 
+const LINKS: &[(&str, &str, &str)] = &[
+    (
+        "pwd",
+        "https://github.com/safstromo/rabbitnook",
+        "github.com/safstromo/rabbitnook",
+    ),
+    (
+        "git",
+        "https://github.com/safstromo",
+        "github.com/safstromo",
+    ),
+    (
+        "vim",
+        "https://github.com/safstromo/.dotfiles/tree/main/nvim/.config/nvim",
+        "nvim .dotfiles",
+    ),
+    (
+        "email",
+        "mailto:safstrom.oliver@gmail.com",
+        "safstrom.oliver@gmail.com",
+    ),
+    ("blog", "https://rabbitnook.com/blog", "blog"),
+    (
+        "sudo",
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    ),
+    (
+        "linkedin",
+        "https://www.linkedin.com/in/safstromo/",
+        "linkedin.com/in/safstromo",
+    ),
+];
+
+const HISTORY_LIMIT: usize = 12;
+
 #[derive(Debug, Clone)]
-pub struct Command {
-    command: String,
-    component: HtmlTag,
-    value: String,
-    name: String,
+pub struct Entry {
+    id: usize,
+    output: Output,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum HtmlTag {
-    P,
-    A,
+#[derive(Debug, Clone)]
+enum Output {
+    Text(String),
+    Link { url: String, label: String },
+}
+
+fn help_text() -> String {
+    let commands: Vec<&str> = LINKS.iter().map(|(command, ..)| *command).collect();
+    format!("Available commands: help, {}, clear", commands.join(", "))
+}
+
+fn resolve(input: &str) -> Option<Output> {
+    match input.to_lowercase().as_str() {
+        "clear" => None,
+        "help" => Some(Output::Text(help_text())),
+        command => Some(
+            LINKS
+                .iter()
+                .find(|(name, ..)| *name == command)
+                .map_or_else(
+                    || Output::Text(format!("{input}: command not found")),
+                    |(_, url, label)| Output::Link {
+                        url: (*url).to_string(),
+                        label: (*label).to_string(),
+                    },
+                ),
+        ),
+    }
 }
 
 #[component]
 pub fn TerminalInput(
-    set_command_history: WriteSignal<Vec<Command>>,
-    command_history: ReadSignal<Vec<Command>>,
+    set_command_history: WriteSignal<Vec<Entry>>,
     input_element: NodeRef<html::Input>,
 ) -> impl IntoView {
-    let (input, _set_input) = signal("".to_string());
-    // let input_element: NodeRef<html::Input> = create_node_ref();
+    let next_id = StoredValue::new(0);
 
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
-        // stop the page from reloading!
         ev.prevent_default();
 
-        // here, we'll extract the value from the input
-        let value = input_element
-            .get()
-            // event handlers can only fire after the view
-            // is mounted to the DOM, so the `NodeRef` will be `Some`
-            .expect("<input> should be mounted")
-            // `leptos::HtmlElement<html::Input>` implements `Deref`
-            // to a `web_sys::HtmlInputElement`.
-            // this means we can call`HtmlInputElement::value()`
-            // to get the current value of the input
-            .value();
-        if command_history.get().len() > 12 {
-            set_command_history.update(|commands| commands.clear());
+        let Some(input) = input_element.get() else {
+            return;
+        };
+        let value = input.value();
+
+        match resolve(&value) {
+            None => set_command_history.update(Vec::clear),
+            Some(output) => {
+                if let Output::Link { url, .. } = &output {
+                    open_link(url);
+                }
+
+                let id = next_id.get_value();
+                next_id.set_value(id + 1);
+
+                set_command_history.update(|history| {
+                    history.push(Entry { id, output });
+                    if history.len() > HISTORY_LIMIT {
+                        history.drain(..history.len() - HISTORY_LIMIT);
+                    }
+                });
+            }
         }
 
-        match value.to_lowercase().as_str() {
-            "clear" => set_command_history.update(|commands| commands.clear()),
-            "help" => {
-                let help_command = Command {
-                    command: value.clone(),
-                    component: HtmlTag::P,
-                    value: "Available commands: help, pwd, git, vim, email, blog, sudo, linkedin, clear"
-                        .to_string(),
-                    name: "help".to_string(),
-                };
-                set_command_history.update(|commands| commands.push(help_command));
-            }
-            "sudo" => {
-                open_link("https://www.youtube.com/watch?v=dQw4w9WgXcQ".to_string());
-                let sudo_command = Command {
-                    command: value.clone(),
-                    component: HtmlTag::A,
-                    value: "https://www.youtube.com/watch?v=dQw4w9WgXcQ".to_string(),
-                    name: "sudo".to_string(),
-                };
-                set_command_history.update(|commands| commands.push(sudo_command));
-            }
-            "pwd" => {
-                open_link("https://github.com/safstromo/rabbitnook".to_string());
-                let pwd_command = Command {
-                    command: value.clone(),
-                    component: HtmlTag::A,
-                    value: "https://github.com/safstromo/rabbitnook".to_string(),
-                    name: "github.com/safstromo/rabbitnook".to_string(),
-                };
-                set_command_history.update(|commands| commands.push(pwd_command));
-            }
-            "git" => {
-                open_link("https://github.com/safstromo".to_string());
-                let git_command = Command {
-                    command: value.clone(),
-                    component: HtmlTag::A,
-                    value: "https://github.com/safstromo".to_string(),
-                    name: "github.com/safstromo".to_string(),
-                };
-                set_command_history.update(|commands| commands.push(git_command));
-            }
-            "email" => {
-                open_link("mailto:safstrom.oliver@gmail.com".to_string());
-                let email_command = Command {
-                    command: value.clone(),
-                    component: HtmlTag::A,
-                    value: "mailto:safstrom.oliver@gmail.com".to_string(),
-                    name: "safstrom.oliver@gmail.com".to_string(),
-                };
-                set_command_history.update(|commands| commands.push(email_command));
-            }
-            "linkedin" => {
-                open_link("https://www.linkedin.com/in/safstromo/".to_string());
-                let linkedin_command = Command {
-                    command: value.clone(),
-                    component: HtmlTag::A,
-                    value: "https://www.linkedin.com/in/safstromo/".to_string(),
-                    name: "linkedin.com/in/safstromo".to_string(),
-                };
-                set_command_history.update(|commands| commands.push(linkedin_command));
-            }
-            "vim" => {
-                open_link(
-                    "https://github.com/safstromo/.dotfiles/tree/main/nvim/.config/nvim"
-                        .to_string(),
-                );
-                let vim_command = Command {
-                    command: value.clone(),
-                    component: HtmlTag::A,
-                    value: "https://github.com/safstromo/.dotfiles/tree/main/nvim/.config/nvim"
-                        .to_string(),
-                    name: "nvim .dotfiles".to_string(),
-                };
-                set_command_history.update(|commands| commands.push(vim_command));
-            }
-            "blog" => {
-                open_link("https://rabbitnook.com/blog".to_string());
-                let blog_command = Command {
-                    command: value.clone(),
-                    component: HtmlTag::A,
-                    value: "https://rabbitnook.com/blog".to_string(),
-                    name: "blog".to_string(),
-                };
-                set_command_history.update(|commands| commands.push(blog_command));
-            }
-            _ => {
-                let invalid_command = Command {
-                    command: value.clone(),
-                    component: HtmlTag::P,
-                    value: value.clone() + ": command not found",
-                    name: "invalid".to_string(),
-                };
-                set_command_history.update(|commands| commands.push(invalid_command));
-            }
-        }
-        let _ = input_element
-            .get()
-            .expect("input element should be mounted")
-            .set_value("");
+        input.set_value("");
     };
 
     view! {
         <TerminalPwd />
         <section class="flex flex-row w-full">
-            <svg
-                class="w-6 h-6 text-green"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-            >
-                <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m9 5 7 7-7 7"
-                ></path>
-            </svg>
-            // TODO: Fix input
+            <Chevron />
             <form class="w-full" on:submit=on_submit>
                 <input
                     class="w-5/6 mx-2 bg-base border-none text-white focus:outline-none"
                     type="text"
-                    value=input
+                    value=""
                     node_ref=input_element
                     id="terminal-input"
                     autofocus
                 />
-            // TODO: Add caret
-            // <span class="caret"></span>
             </form>
         </section>
     }
 }
 
-fn open_link(url: String) {
-    Effect::new(move |_| {
-        let window = web_sys::window().expect("window should be available");
-        window.open_with_url_and_target(&url, "_blank").unwrap();
-    });
+fn open_link(url: &str) {
+    if let Some(window) = web_sys::window() {
+        let _ = window.open_with_url_and_target(url, "_blank");
+    }
 }
 
 #[component]
-pub fn TerminalHistory(command_history: ReadSignal<Vec<Command>>) -> impl IntoView {
+pub fn TerminalHistory(command_history: ReadSignal<Vec<Entry>>) -> impl IntoView {
     view! {
         <ul class="overflow-hidden">
-            <For each=move || command_history.get() key=|command| command.command.clone() let:child>
-                <TerminalCommand command=child />
+            <For each=move || command_history.get() key=|entry| entry.id let:child>
+                <TerminalCommand output=child.output />
             </For>
 
         </ul>
@@ -203,63 +147,48 @@ pub fn TerminalHistory(command_history: ReadSignal<Vec<Command>>) -> impl IntoVi
 }
 
 #[component]
-fn TerminalCommand(command: Command) -> impl IntoView {
-    if command.component == HtmlTag::A {
-        return view! {
-            <TerminalPwd />
-            <div class="flex flex-row mb-2">
-                <svg
-                    class="w-6 h-6 text-green"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m9 5 7 7-7 7"
-                    ></path>
-                </svg>
-                <li class="text-white">
-                    <a class="text-blue mx-2" href=command.value.clone() target="_blank">
-                        {command.name}
-                    </a>
-                </li>
-            </div>
-        }
-        .into_any();
-    } else {
-        return view! {
-            <TerminalPwd />
-            <div class="flex flex-row mb-2">
-                <svg
-                    class="w-6 h-6 text-green"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m9 5 7 7-7 7"
-                    ></path>
-                </svg>
-                <li class="text-white">
-                    <p class="text-white mx-2">{command.value}</p>
-                </li>
-            </div>
-        }
-        .into_any();
+fn TerminalCommand(output: Output) -> impl IntoView {
+    view! {
+        <TerminalPwd />
+        <div class="flex flex-row mb-2">
+            <Chevron />
+            <li class="text-white">
+                {match output {
+                    Output::Link { url, label } => {
+                        view! {
+                            <a class="text-blue mx-2" href=url target="_blank">
+                                {label}
+                            </a>
+                        }
+                            .into_any()
+                    }
+                    Output::Text(text) => view! { <p class="text-white mx-2">{text}</p> }.into_any(),
+                }}
+            </li>
+        </div>
+    }
+}
+
+#[component]
+fn Chevron() -> impl IntoView {
+    view! {
+        <svg
+            class="w-6 h-6 text-green"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+        >
+            <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m9 5 7 7-7 7"
+            ></path>
+        </svg>
     }
 }
 
@@ -298,5 +227,43 @@ fn TerminalPwd() -> impl IntoView {
             </svg>
             <p class="text-peach text-lg font-semibold">v1.0.0</p>
         </section>
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn help_lists_every_command() {
+        assert_eq!(
+            help_text(),
+            "Available commands: help, pwd, git, vim, email, blog, sudo, linkedin, clear"
+        );
+    }
+
+    #[test]
+    fn clear_resolves_to_nothing() {
+        assert!(resolve("clear").is_none());
+        assert!(resolve("CLEAR").is_none());
+    }
+
+    #[test]
+    fn known_command_resolves_to_its_link() {
+        match resolve("git") {
+            Some(Output::Link { url, label }) => {
+                assert_eq!(url, "https://github.com/safstromo");
+                assert_eq!(label, "github.com/safstromo");
+            }
+            other => panic!("expected a link, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn unknown_command_keeps_the_original_casing() {
+        match resolve("Sudo rm") {
+            Some(Output::Text(text)) => assert_eq!(text, "Sudo rm: command not found"),
+            other => panic!("expected text, got {other:?}"),
+        }
     }
 }

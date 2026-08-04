@@ -1,94 +1,57 @@
-<picture>
-    <source srcset="https://raw.githubusercontent.com/leptos-rs/leptos/main/docs/logos/Leptos_logo_Solid_White.svg" media="(prefers-color-scheme: dark)">
-    <img src="https://raw.githubusercontent.com/leptos-rs/leptos/main/docs/logos/Leptos_logo_RGB.svg" alt="Leptos Logo">
-</picture>
+# rabbitnook
 
-# Leptos Axum Starter Template
+[rabbitnook.com](https://rabbitnook.com) — my personal site and blog.
 
-This is a template for use with the [Leptos](https://github.com/leptos-rs/leptos) web framework and the [cargo-leptos](https://github.com/akesson/cargo-leptos) tool using [Axum](https://github.com/tokio-rs/axum).
+A [Leptos](https://github.com/leptos-rs/leptos) full-stack Rust app: server-rendered by Axum,
+hydrated in the browser as WebAssembly, styled with Tailwind v4. The home page has a small
+interactive terminal; the blog posts are written as Leptos components with client-side syntax
+highlighting.
 
-## Creating your template repo
+## Development
 
-If you don't have `cargo-leptos` installed you can install it with
-
-```bash
-cargo install cargo-leptos
-```
-
-Then run
+The dev shell provides the Rust toolchain and every binary `cargo-leptos` shells out to
+(`sass`, `tailwindcss`, `wasm-opt`, `wasm-bindgen`). With
+[devenv](https://devenv.sh) installed:
 
 ```bash
-cargo leptos new --git leptos-rs/start-axum
+devenv shell
 ```
 
-to generate a new project template.
+Then:
 
-```bash
-cd rabbitnook
-```
+| Command | What it does |
+|---|---|
+| `dev` | dev server with live reload on <http://127.0.0.1:3000> |
+| `release` | production build: binary in `target/release`, site in `target/site` |
+| `check` | leptosfmt + rustfmt + clippy, for both the server and WASM builds |
+| `fmt` | apply both formatters |
+| `cargo test` | unit tests |
 
-to go to your newly created project.  
-Feel free to explore the project structure, but the best place to start with your application code is in `src/app.rs`.  
-Addtionally, Cargo.toml may need updating as new versions of the dependencies are released, especially if things are not working after a `cargo update`.
+`devenv up` runs the watcher as a managed process.
 
-## Running your project
+The `wasm-bindgen` CLI version in `devenv.nix` must match the `wasm-bindgen` crate version in
+`Cargo.lock` exactly — see the comments in that file before changing either.
 
-```bash
-cargo leptos watch
-```
+## Adding a blog post
 
-## Installing Additional Tools
+1. Add `src/components/blogpages/<slug>.rs` and declare it in that directory's `mod.rs`.
+2. Wrap the body in `<BlogLayout>`; it supplies highlight.js, the footer links and the ko-fi
+   button. Use `<CodeBlock class="rust" code=my_snippet />` for code.
+3. Add the route in `src/app.rs` (keep `ssr=SsrMode::Async`).
+4. Add the post to `POSTS` in `src/components/blog.rs` so it appears on the index.
 
-By default, `cargo-leptos` uses `nightly` Rust, `cargo-generate`, and `sass`. If you run into any trouble, you may need to install one or more of these tools.
+Images go in `public/blog/<slug>/`.
 
-1. `rustup toolchain install nightly --allow-downgrade` - make sure you have Rust nightly
-2. `rustup target add wasm32-unknown-unknown` - add the ability to compile Rust to WebAssembly
-3. `cargo install cargo-generate` - install `cargo-generate` binary (should be installed automatically in future)
-4. `npm install -g sass` - install `dart-sass` (should be optional in future
+## Deployment
 
-## Compiling for Release
+`Dockerfile` builds a static site plus server binary and ships them on a bare Alpine image.
+`.github/workflows/docker-publish.yml` builds, pushes to ghcr.io and signs the image with
+cosign when a GitHub release is published.
 
-```bash
-cargo leptos build --release
-```
+The server binds the address from `[package.metadata.leptos] site-addr` (127.0.0.1:3000).
+Set `LEPTOS_SITE_ADDR` at runtime to override it — a container published to other hosts needs
+`0.0.0.0:3000`.
 
-Will generate your server binary in target/server/release and your site package in target/site
+## License
 
-## Testing Your Project
-
-```bash
-cargo leptos end-to-end
-```
-
-```bash
-cargo leptos end-to-end --release
-```
-
-Cargo-leptos uses Playwright as the end-to-end test tool.  
-Tests are located in end2end/tests directory.
-
-## Executing a Server on a Remote Machine Without the Toolchain
-
-After running a `cargo leptos build --release` the minimum files needed are:
-
-1. The server binary located in `target/server/release`
-2. The `site` directory and all files within located in `target/site`
-
-Copy these files to your remote server. The directory structure should be:
-
-```text
-rabbitnook
-site/
-```
-
-Set the following environment variables (updating for your project as needed):
-
-```text
-LEPTOS_OUTPUT_NAME="rabbitnook"
-LEPTOS_SITE_ROOT="site"
-LEPTOS_SITE_PKG_DIR="pkg"
-LEPTOS_SITE_ADDR="127.0.0.1:3000"
-LEPTOS_RELOAD_PORT="3001"
-```
-
-Finally, run the server binary.
+MIT — see [LICENSE](LICENSE).

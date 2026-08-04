@@ -21,10 +21,6 @@
     toolchainFile = ./rust-toolchain.toml;
   };
 
-  # Node exists only for the Playwright suite: `cargo leptos end-to-end` shells
-  # out to `npx playwright test` in end2end/.
-  languages.javascript.enable = true;
-
   # ---------------------------------------------------------------------------
   # Packages
   #
@@ -48,10 +44,9 @@
 
     # -> `wasm-bindgen`. The CLI version has to match the wasm-bindgen *crate*
     # version in Cargo.lock exactly or the build fails with a schema mismatch.
-    # That is what the Dockerfile's `cargo update -p wasm-bindgen --precise
-    # 0.2.100` is pinning. If you bump the crate, bump this attribute to match
-    # (nixpkgs carries wasm-bindgen-cli_0_2_<patch> for each supported patch).
-    wasm-bindgen-cli_0_2_100
+    # If you bump the crate, bump this attribute to match (nixpkgs carries
+    # wasm-bindgen-cli_0_2_<patch> for each supported patch).
+    wasm-bindgen-cli_0_2_126
 
     # Formats the `view!` macros; plain rustfmt leaves them alone.
     leptosfmt
@@ -92,24 +87,11 @@
     echo "rabbitnook  |  dev  release  check  fmt   (site: http://127.0.0.1:3000)"
   '';
 
-  # ---------------------------------------------------------------------------
-  # Playwright / end2end
-  #
-  # Deliberately left off. Downloaded Playwright browsers do not run on NixOS,
-  # and nixpkgs' browsers only work if the npm package matches them exactly -
-  # end2end/package-lock.json pins @playwright/test 1.28.0 while
-  # pkgs.playwright-driver is on 1.59.1, so wiring them up now would only swap
-  # one confusing failure for another.
-  #
-  # To enable: bump the npm dep to whatever `nix eval nixpkgs#playwright-driver.version`
-  # reports, then uncomment the block below. (The suite also still contains the
-  # untouched Leptos template test, which asserts "Welcome to Leptos!" and fails.)
-  #
-  # env = {
-  #   PLAYWRIGHT_BROWSERS_PATH = "${pkgs.playwright-driver.browsers}";
-  #   PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
-  # };
-  # ---------------------------------------------------------------------------
+  # There is no browser/e2e tooling here on purpose: the Playwright suite was
+  # deleted (it only ever held the unmodified Leptos template test). Adding one
+  # back on NixOS means pinning the npm package to pkgs.playwright-driver's
+  # version and pointing PLAYWRIGHT_BROWSERS_PATH at pkgs.playwright-driver.browsers,
+  # since downloaded browsers do not run here.
 
   # No git-hooks block: hooks are intentionally not configured for this project.
   # Use `check` manually.

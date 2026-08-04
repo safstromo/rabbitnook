@@ -4,8 +4,8 @@ async fn main() {
     use axum::Router;
     use leptos::logging::log;
     use leptos::prelude::*;
-    use leptos_axum::{generate_route_list, LeptosRoutes};
-    use rabbitnook::app::{shell, App};
+    use leptos_axum::{LeptosRoutes, generate_route_list};
+    use rabbitnook::app::{App, shell};
 
     let conf = get_configuration(None).unwrap();
     let addr = conf.leptos_options.site_addr;
