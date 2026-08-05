@@ -1,0 +1,13 @@
+# Build output - never needed in the image, and copying it in is what makes
+# `docker build` slow (and fail outright if the local target/ has files the
+# build user cannot read).
+target/
+
+# Local tooling state
+.devenv*
+.direnv/
+devenv.local.nix
+devenv.local.yaml
+
+.git/
+.github/
